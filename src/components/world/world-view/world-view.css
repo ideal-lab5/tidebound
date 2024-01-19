@@ -1,20 +1,22 @@
-.your-world-container {
+/* .world-container {
   display: grid;
   text-align: center;
   padding: 100px;
-}
+} */
 
-.your-world-body {
+.world-body {
   display: grid;
   padding: 10px;
+  width: 70vw;
+  overflow: hidden;
 }
 
 .canvas-container {
   display: flex;
   padding: 50px;
   margin: 0 auto;
-  width: 600px;
-  height: 600px;
+  width: 30vw;
+  height: 30vh;
   border: solid 1px black;
   /* background-color: rgb(128, 128, 128); */
   background-color: rgba(255, 255, 255, 0.6);

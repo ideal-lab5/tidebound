@@ -8,6 +8,8 @@ body {
   padding: 0;
   background-size: 100vw 120vh;
   font-size: 25px;
+  overflow-x: scroll;
+  position: absolute;
 }
 
 .header {
@@ -35,7 +37,7 @@ body {
   background-color: rgba(0, 39, 77, 0.4); /* Semi-transparent Darker Blue */
   border: 1px solid #00ff00; /* Neon Green border */
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Neon Green glow */
-  width: 50%;
+  width: 80vw;
   height: 80vh;
   /* max-height: 90vh; */
   /* width: 50%; */
@@ -68,6 +70,7 @@ body {
   border: 1px solid #00ff00; /* Neon Green border */
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Neon Green glow */
   max-width: 400px;
+  z-index: 1000;
 }
 
 .close-button {
@@ -125,7 +128,8 @@ input[type="text"]:focus {
 .container {
   display: grid;
   text-align: center;
-  padding: 100px;
+  /* padding: 100px; */
+  width: 70vw;
 }
 
 .copy:hover {

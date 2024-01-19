@@ -101,8 +101,8 @@ function Transmutation() {
             <h3>Instructions</h3>
             { activeSwap === null || activeSwap === '' && (
             <p>
-                Transmutation lets two parties trustlessly swap their worlds. It is a two-party <b>non-interactive trustless atomic asset swap</b>
-                 enabled with secure delayed transactions. Specify the owner of the seed you want to swap with.
+                Transmutation lets two parties trustlessly swap their worlds. It is a two-party <b>non-interactive trustless atomic asset swap </b>
+                 enabled with secure delayed transactions (timelock encryption). Specify the owner of the seed you want to swap with.
                  If both recipients accept the swap by the deadline, then the protocol can be completed and the worlds are swapped.
                  If either party rejects or does not participate, then it fails.
                  <br/>

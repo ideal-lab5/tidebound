@@ -22,6 +22,7 @@ import { Environment, OrbitControls } from '@react-three/drei';
 import Trees from '../../Trees';
 import Grass from '../../Grass';
 import Clouds from '../../Clouds';
+import abbreviate from '../../../utils/stringUtils';
 import Helpers from '../../../utils/Helpers';
 
 function WorldView() {
@@ -58,7 +59,6 @@ function WorldView() {
    };
 
    const queryWorld = async () => {
-      // console.log('hey')
       let validity = isValid(accountId);
       let account = bitwiseCmp(validity, new Uint8Array(32).fill(0)) ?
          signer.address : validity;
@@ -70,12 +70,9 @@ function WorldView() {
          let rng = csprngFromSeed(data);
          setGenerationSeed(rng());
          setGeneral('Trees', rng());
-         // setGeneration('Trees', rng());
          setGeneral('Grass', rng());
          setGeneral('Water', rng());
          setGeneral('Clouds', rng());
-         // setGeneral('Clouds');
-         // setGeneration('Clouds', rng());
          setSeed(data);
       }
    }
@@ -132,7 +129,6 @@ function WorldView() {
    const HexCanvas = () => {
       return (
          <Canvas
-            // className={`${fullscreen ? " fullscreen" : ""}`}
             shadows
             gl={{
                antialias: true,
@@ -191,14 +187,16 @@ function WorldView() {
                Show Instructions
             </button>
          )}
-         <div className='your-world-body'>
+         <div className='world-body'>
             {seed === '' || seed === NOWORLD ? <div><CreateWorld callback={handleCreateWorld} /></div> :
                <div className='world-info'>
                   <span>Owner:</span>
-                  <span className='copy' onClick={() => navigator.clipboard.writeText(accountId === undefined ? signer.address : accountId)}>{accountId === undefined ? signer.address : accountId}</span>
+                  <span className='copy' onClick={() => navigator.clipboard.writeText(accountId === undefined ? signer.address : accountId)}>
+                     {accountId === undefined ? abbreviate(signer.address, 4, signer.address.length - 4) : abbreviate(accountId, 4, accountId.length - 4)}
+                  </span>
                   <div>
                      <span>Seed: </span>
-                     <span className='copy' onClick={() => navigator.clipboard.writeText(seed)}>{seed.slice(0, 4) + '...' + seed.slice(seed.length - 4)}</span>
+                     <span className='copy' onClick={() => navigator.clipboard.writeText(seed)}>{abbreviate(seed, 4, seed.length - 4)}</span>
                   </div>
                   <div className='toggle-container'>
                      <label className='toggle-label' htmlFor='toggle'>Perlin</label>

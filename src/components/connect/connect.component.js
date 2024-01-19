@@ -52,7 +52,9 @@ function WalletConnect(props) {
         <div className="connect">
             {isConnected ?
                 <div className="wallet-amount">
-                    <span>{ signerAddress }</span>
+                    <span className="copy" onClick={() => navigator.clipboard.writeText(signerAddress)}>
+                        Address: { signerAddress.slice(0, 4) + '...' + signerAddress.slice(signerAddress.length - 4) }
+                    </span>
                     <span>Balance: {balance} ETF</span>
                 </div> :
                 <div className="connect-modal-container">

@@ -1,8 +1,58 @@
 .world-registry-body {
     margin: 0 auto;
-    width: 50%;
+}
+
+/* td {
+    padding: 10px;
+} */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #00ff00;
+    /* Neon Green border for the table */
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #00ff00;
+    /* Neon Green border for table cells */
+}
+
+th {
+    background-color: #001f3f;
+    /* Dark Blue background for table header */
+    color: #00ff00;
+    /* Neon Green text for table header */
+}
+
+tr:nth-child(even) {
+    background-color: #001f3f;
+    /* Dark Blue background for even rows */
+}
+
+tr:nth-child(odd) {
+    background-color: #00274d;
+    /* Darker Blue background for odd rows */
 }
 
 td {
-    padding: 10px;
+    text-align: center;
 }
+
+.details-button {
+    background-color: #00274d; /* Darker Blue for the button */
+    color: #00ff00; /* Neon Green text on button */
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+  }
+  
+  .details-button:hover {
+    background-color: #ff00ff; /* Neon Magenta background on button hover */
+    color: #001f3f; /* Dark Blue text on button hover */
+    border-color: #ff00ff; /* Neon Magenta border on button hover */
+  }
