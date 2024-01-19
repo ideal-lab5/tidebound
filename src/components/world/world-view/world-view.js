@@ -126,38 +126,38 @@ function WorldView() {
       return rand;
    }
 
-   const HexCanvas = () => {
-      return (
-         <Canvas
-            shadows
-            gl={{
-               antialias: true,
-               toneMappingExposure: 0.5,
-               shadowMap: {
-                  enabled: true,
-                  type: PCFShadowMap
-               },
-               outputEncoding: sRGBEncoding
-            }}
-            camera={{ zoom: 30, position: [0, 0, 600] }}
-         >
-            <Suspense fallback={null}>
-               <group rotation-x={-Math.PI / 2}>
-                  {general.Trees && <Trees points={points} />}
-                  {general.Grass && <Grass points={points} />}
-                  {general.Clouds && <Clouds />}
-                  <Terrain points={points} />
-               </group>
-               <Environment preset="sunset" />
-               <OrbitControls autoRotate autoRotateSpeed={0.6} enablePan={false} />
-               {/* <Helpers /> */}
-               <Effects />
-               {/* <Stats /> */}
-            </Suspense>
-            <Lights />
-         </Canvas>
-      );
-   }
+   // const HexCanvas = () => {
+   //    return (
+   //       <Canvas
+   //          shadows
+   //          gl={{
+   //             antialias: true,
+   //             toneMappingExposure: 0.5,
+   //             shadowMap: {
+   //                enabled: true,
+   //                type: PCFShadowMap
+   //             },
+   //             outputEncoding: sRGBEncoding
+   //          }}
+   //          camera={{ zoom: 30, position: [0, 0, 600] }}
+   //       >
+   //          <Suspense fallback={null}>
+   //             <group rotation-x={-Math.PI / 2}>
+   //                {general.Trees && <Trees points={points} />}
+   //                {general.Grass && <Grass points={points} />}
+   //                {general.Clouds && <Clouds />}
+   //                <Terrain points={points} />
+   //             </group>
+   //             <Environment preset="sunset" />
+   //             <OrbitControls autoRotate autoRotateSpeed={0.6} enablePan={false} />
+   //             {/* <Helpers /> */}
+   //             <Effects />
+   //             {/* <Stats /> */}
+   //          </Suspense>
+   //          <Lights />
+   //       </Canvas>
+   //    );
+   // }
 
    return (
       <div className='container' key={refreshKey}>
@@ -165,6 +165,9 @@ function WorldView() {
          {showInfo && (
             <div className='fixed-textbox inner'>
                <h3>Instructions</h3>
+               <p>
+                  You need ETF tokens to use this feature. You can get some from the <a target='_blank' href='https://etf.idealabs.network/docs/examples/getting_started'>faucet</a>.
+               </p>
                {seed === '' || seed === NOWORLD ?
                   <p>
                      Use onchain randomness to create a unique seed to generate your world. Optionally provide
