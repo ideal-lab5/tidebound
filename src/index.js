@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import './App.css';
 import "./styles.css";
 
 // import { Etf } from '@ideallabs/etf.js'
@@ -20,6 +21,7 @@ import { createOrbitDB } from '@orbitdb/core';
 import { gossipsub } from "@chainsafe/libp2p-gossipsub";
 import { identify } from "@libp2p/identify";
 import { createLibp2p } from 'libp2p'
+import logo from './resources/logo.png';
 
 
 function Overlay() {
@@ -37,7 +39,7 @@ function Overlay() {
     // }
 
     const setup = async () => {
-      await setupOrbitDb();
+      // await setupOrbitDb();
     }
     setup()
   }, []);
@@ -101,17 +103,31 @@ function Overlay() {
     //   });
   }
 
-  function hanldeOnClick() {
+  function handleOnClick() {
     set(true)
   }
 
   return (
     <>
       <App />
-      <div className="dot" />
+      <div className="overlay" />
       <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
-        <div className="stack">
-          <button onClick={hanldeOnClick}>Start</button>
+        <div className="start-screen">
+          {/* Background Image */}
+          <div className="background-image"></div>
+
+          {/* Main Content */}
+          <div className="stack">
+            <img src={logo} alt="Game Logo" className="logo" />
+            <button className="start-button" onClick={handleOnClick}>
+              Enter
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div className="footer">
+            <p>© 2024 Ideal Labs. All Rights Reserved.</p>
+          </div>
         </div>
       </div>
     </>

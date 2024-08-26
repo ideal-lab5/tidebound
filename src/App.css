@@ -1,0 +1,84 @@
+/* Basic reset and full-page setup */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Press Start 2P', cursive;
+    /* Retro game font */
+}
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #fff;
+    text-align: center;
+    position: relative;
+}
+
+/* Background Image Styling */
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* Stack Container Styling */
+.stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Logo Styling */
+.logo {
+    width: 800px;
+    height: auto;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Subtitle Styling */
+.subtitle {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Start Button Styling */
+.start-button {
+    background-color: #ffcc00;
+    color: #000;
+    font-size: 18px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.start-button:hover {
+    background-color: #ffaa00;
+    transform: scale(1.05);
+}
+
+/* Footer Styling */
+.footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}

@@ -56,11 +56,31 @@ const Terrain = forwardRef(({ points, onClickHandler }, ref) => {
     [points, noise, color, colors, generation]
   );
 
+  // Function to find the nearest hexagon center to a given (x, z) coordinate
+  const findNearestHexCenter = (x, z) => {
+    let nearestPoint = null;
+    let minDist = Infinity;
+
+    heights.current.forEach((value, key) => {
+      const [px, , pz] = key.split(',').map(Number); // Extract x, z from the key
+      const dist = (px - x) ** 2 + (pz - z) ** 2;
+      if (dist < minDist) {
+        minDist = dist;
+        nearestPoint = key;
+      }
+    });
+
+    return nearestPoint;
+  };
+
   // Expose methods via ref
   useImperativeHandle(ref, () => ({
     getHeightAt(x, z) {
-      const key = [x, z].join(',');
-      return heights.current.get(key) || 0;
+      const nearestHex = findNearestHexCenter(x, z);
+      if (nearestHex) {
+        return heights.current.get(nearestHex) || 0;
+      }
+      return 0;
     },
   }));
 

@@ -1,40 +1,35 @@
 import * as THREE from "three";
 import * as RAPIER from "@dimforge/rapier3d-compat";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { CapsuleCollider, RigidBody, useRapier } from "@react-three/rapier";
 import Axe from "./Axe";
 
-const SPEED = 1;
+const SPEED = 2;
+const DAMPING = 0.5;
+const HEIGHT_CHANGE_AMOUNT = 0.1; // Amount to change height per key press
 const direction = new THREE.Vector3();
 const frontVector = new THREE.Vector3();
 const sideVector = new THREE.Vector3();
-const rotation = new THREE.Vector3();
 
-export function Player({ lerp = THREE.MathUtils.lerp, terrainRef }) {
+export function Player({ lerp = THREE.MathUtils.lerp, terrainRef, onPositionChange }) {
   const axe = useRef();
   const ref = useRef();
   const rapier = useRapier();
   const [, get] = useKeyboardControls();
 
+  const [prevPosition, setPrevPosition] = useState(new THREE.Vector3());
+  const [smoothedY, setSmoothedY] = useState(0);
+  const [isMovingUp, setIsMovingUp] = useState(false);
+  const [isMovingDown, setIsMovingDown] = useState(false);
+
   useFrame((state) => {
     const { forward, backward, left, right, jump } = get();
     const velocity = ref.current.linvel();
 
-    // Update camera
+    // Update camera position
     state.camera.position.set(...ref.current.translation());
-
-    // Update axe
-    axe.current.children[0].rotation.x = lerp(
-      axe.current.children[0].rotation.x,
-      Math.sin((velocity.length() > 1) * state.clock.elapsedTime * 10) / 6,
-      0.1
-    );
-    axe.current.rotation.copy(state.camera.rotation);
-    axe.current.position
-      .copy(state.camera.position)
-      .add(state.camera.getWorldDirection(rotation).multiplyScalar(1));
 
     // Movement
     frontVector.set(0, 0, backward - forward);
@@ -45,34 +40,90 @@ export function Player({ lerp = THREE.MathUtils.lerp, terrainRef }) {
       .multiplyScalar(SPEED)
       .applyEuler(state.camera.rotation);
 
-    ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
+    // Smooth velocity changes for horizontal movement
+    const targetVelocity = new THREE.Vector3(
+      direction.x * DAMPING, 
+      // velocity.y, 
+      0,
+      direction.z * DAMPING);
+    ref.current.setLinvel(targetVelocity);
 
-    // Height adjustment
-    if (terrainRef && terrainRef.current) {
-      const playerPosition = ref.current.translation();
-      const playerX = playerPosition.x;
-      const playerZ = playerPosition.z;
+    // Height adjustment based on key states
+    const playerPosition = ref.current.translation();
+    let newY = playerPosition.y;
 
-      // Assuming getHeightAt is available on terrainRef
-      const height = terrainRef.current.getHeightAt(playerX, playerZ);
-      ref.current.setTranslation({ ...playerPosition, y: height });
-      console.log(`Player height updated to: ${height}`);
+    if (isMovingUp) {
+      newY += HEIGHT_CHANGE_AMOUNT;
+    }
+    if (isMovingDown) {
+      newY -= HEIGHT_CHANGE_AMOUNT;
     }
 
-    // Jumping
+    const smoothedY = lerp(playerPosition.y, newY, 0.1);
+    ref.current.setTranslation(new THREE.Vector3(playerPosition.x, smoothedY, playerPosition.z));
+
+    // Update previous position
+    if (Math.abs(prevPosition.x - playerPosition.x) > 0.02 || Math.abs(prevPosition.z - playerPosition.z) > 0.02) {
+      setPrevPosition(new THREE.Vector3(playerPosition.x, playerPosition.y, playerPosition.z));
+      onPositionChange(playerPosition); // Call the callback to update position
+    }
+
+    // Grounded check and jumping
     const world = rapier.world.raw();
-    const ray = world.castRay(new RAPIER.Ray(ref.current.translation(), { x: 0, y: -1, z: 0 }));
-    const grounded = ray && ray.collider && Math.abs(ray.toi) <= 1.75;
-    if (jump && grounded) ref.current.setLinvel({ x: 0, y: 1.5, z: 0 });
+    const rayOrigin = ref.current.translation().clone();
+    rayOrigin.y += 1; // Start the ray slightly above the player
+    const ray = world.castRay(new RAPIER.Ray(rayOrigin, { x: 0, y: -1, z: 0 }));
+    const grounded = ray && ray.collider && ray.toi <= 1.0;
+
+    if (jump && grounded) {
+      ref.current.setLinvel({ x: direction.x * DAMPING, y: 5, z: direction.z * DAMPING });
+    }
   });
+
+  // Adjust height based on key inputs
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Shift') {
+        setIsMovingDown(true);
+      } else if (event.key === ' ') {
+        setIsMovingUp(true);
+      }
+    };
+
+    const handleKeyUp = (event) => {
+      if (event.key === 'Shift') {
+        setIsMovingDown(false);
+      } else if (event.key === ' ') {
+        setIsMovingUp(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   return (
     <>
-      <RigidBody ref={ref} colliders={false} mass={1} type="dynamic" position={[0, 10, 0]} enabledRotations={[false, false, false]}>
-        <CapsuleCollider args={[0.75, 0.5]} />
+      <RigidBody
+        ref={ref}
+        colliders={true}
+        mass={1}
+        type="dynamic"
+        position={[0, 5, 0]} // Ensure this is above the initial terrain height
+        enabledRotations={[false, false, false]}
+      >
+        <CapsuleCollider args={[0.5, 0.5]} />
       </RigidBody>
-      <group ref={axe} onPointerMissed={() => (axe.current.children[0].rotation.x = -0.5)}>
-        <Axe position={[0.15, -0.25, 0.5]} />
+      <group
+        ref={axe}
+        onPointerMissed={() => (axe.current.children[0].rotation.x = -0.5)}
+      >
+        <Axe position={[0.15, -0.1, 0.65]} />
       </group>
     </>
   );
