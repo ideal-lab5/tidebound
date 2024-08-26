@@ -1,6 +1,8 @@
 # Tidebound
 
-Tidebound is a peer-to-peer web3 game set in a flooded world controlled by the tides. Players are subject to the random wills of the tides which they must overcome to recover the world. It uses randomness from the IDN Randomness beacon.
+Tidebound is a **fully decentralized**, peer-to-peer web3 game. It is an 'autonomous world' set in a flooded apocalypse where layers are subject to the random wills of the tides. They must overcome to recover the world. 
+
+Tidebound is powered by verifiable randomness from the IDN Randomness beacon. It uses an orbitDB backend.
 
 ## Build
 

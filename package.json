@@ -3,12 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chainsafe/libp2p-gossipsub": "^13.2.0",
+    "@chainsafe/libp2p-noise": "^15.1.1",
+    "@chainsafe/libp2p-yamux": "^6.0.2",
+    "@libp2p/bootstrap": "^10.1.5",
+    "@libp2p/identify": "^2.1.5",
+    "@libp2p/pubsub": "^9.0.26",
+    "@libp2p/websockets": "^8.2.0",
+    "@orbitdb/core": "^2.2.0",
     "@pmndrs/branding": "0.0.8",
     "@react-three/drei": "9.34.4",
     "@react-three/fiber": "8.8.10",
     "@react-three/rapier": "0.8.2",
     "@types/three": "0.144.0",
+    "helia": "^4.2.5",
     "leva": "^0.9.35",
+    "libp2p": "^1.9.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
@@ -37,6 +47,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "compilerOptions": {
+    "module": "ES2022",
+    "esModuleInterop": true,
+    "target": "ES2022",
+    "moduleResolution": "node"
   },
   "keywords": [
     "pointerlock-controls",
