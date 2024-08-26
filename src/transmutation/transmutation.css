@@ -1,0 +1,28 @@
+.transmutation-component {
+    /* display: grid; */
+    /* display: grid; */
+    /* text-align: center; */
+    /* padding: 100px; */
+}
+
+.transmutation-body {
+    /* height: 100vh; */
+    /* display: grid; */
+    /* padding: 10px;
+    overflow: auto; */
+    margin: 0 auto;
+}
+
+/* .transmutation-body {
+    
+    max-width: 200px;
+} */
+
+.pending-swap-body {
+    /* max-width: 100%;
+    overflow: auto; */
+}
+
+.pending-swap-container {
+    display: grid;
+}

@@ -1,28 +1,19 @@
-![](./public/title.png)
+# Tidebound
 
-TerraBit is game demonstration to show how to use publicly verifiable onchain randomness and delayed transactions in dapps built on the [ETF network](https://etf.idealabs.network).
+Tidebound is a peer-to-peer web3 game set in a flooded world controlled by the tides. Players are subject to the random wills of the tides which they must overcome to recover the world. It uses randomness from the IDN Randomness beacon.
 
-<p align="center">
-    <img src="./public/hex.gif" /> 
-</p>
+## Build
 
-Built with [etf.js](https://github.com/ideal-lab5/etf.js) and [react-three-fiber](https://github.com/pmndrs/react-three-fiber).
+``` shell
+npm i 
+```
 
 ## Run
 
-Run 
-
-```
-npm i
+``` shell
 npm run start
 ```
 
-## Configuration
+## License
 
-The application expects a `.env` file to exist with a reference to the deployed [terrabit contract](https://github.com/ideal-lab5/contracts/tree/main/examples/transmutation).
-
-For example:
-
-``` 
-REACT_APP_CONTRACT_ADDRESS="5Gw1ejgmYXR4YRch7AmrTdDyrdoLsEM54Aws34nQaXYWrzqj"
-```
+Apache2
