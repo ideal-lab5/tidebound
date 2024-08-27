@@ -5,15 +5,15 @@
 // import 'process';
 
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import './App.css';
 import "./styles.css";
 
-// import { Etf } from '@ideallabs/etf.js'
-// import { cryptoWaitReady } from '@polkadot/util-crypto'
-// import { CodePromise, ContractPromise } from '@polkadot/api-contract';
-// import abi from './resources/transmutation.json';
+import { Etf } from '@ideallabs/etf.js'
+import { cryptoWaitReady } from '@polkadot/util-crypto'
+import { CodePromise, ContractPromise } from '@polkadot/api-contract';
+import abi from './resources/transmutation.json';
 
 import App from "./App";
 import { createHelia } from 'helia';
@@ -22,10 +22,14 @@ import { gossipsub } from "@chainsafe/libp2p-gossipsub";
 import { identify } from "@libp2p/identify";
 import { createLibp2p } from 'libp2p'
 import logo from './resources/logo.png';
+import WalletConnect from "./connect/connect.component";
+import { EtfContext } from "./EtfContext";
 
 
 function Overlay() {
   const [ready, set] = useState(false)
+  const [showConnect, setShowConnect] = useState(false);
+
   const [etf, setEtf] = useState(null)
   const [signer, setSigner] = useState(null);
 
@@ -37,11 +41,12 @@ function Overlay() {
     //   console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
     //   process.kill();
     // }
+    
+    // handleIDNConnect().then(() => {
+    //   console.log('connected to IDN')
+    //   setupOrbitDb()
+    // });
 
-    const setup = async () => {
-      // await setupOrbitDb();
-    }
-    setup()
   }, []);
 
   const setupOrbitDb = async () => {
@@ -89,39 +94,53 @@ function Overlay() {
   }
 
   const handleIDNConnect = async () => {
-    //   await cryptoWaitReady();
-    //   let ws = process.env.REACT_APP_WS_URL;
-    //   let etf = new Etf(ws, false)
-    //   await etf.init()
-    //   setEtf(etf)
+    await cryptoWaitReady();
+    // let ws = process.env.REACT_APP_WS_URL;
+    let ws = 'ws://127.0.0.1:9944';
+    let etf = new Etf(ws, false)
+    await etf.init()
+    setEtf(etf)
 
-    //   const contract = new ContractPromise(etf.api, abi, process.env.REACT_APP_CONTRACT_ADDRESS);
-    //   setContract(contract);
+    const contract = new ContractPromise(etf.api, abi, process.env.REACT_APP_CONTRACT_ADDRESS);
+    setContract(contract);
 
-    //   const _unsubscribe = await etf.api.rpc.chain.subscribeNewHeads((header) => {
-    //     setLatestBlock(parseInt(header.number));
-    //   });
+    const _unsubscribe = await etf.api.rpc.chain.subscribeNewHeads((header) => {
+      setLatestBlock(parseInt(header.number));
+    });
   }
+
+  const handleSignerChange = useCallback((newSigner) => {
+    setSigner(newSigner)
+    set(true)
+  }, []);
 
   function handleOnClick() {
     set(true)
+    // setShowConnect(true)
   }
 
   return (
     <>
+      <link href="https://fonts.googleapis.com/css2?family=Captain's+Quarters:wght@400&display=swap" rel="stylesheet"></link>
       <App />
       <div className="overlay" />
       <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
         <div className="start-screen">
-          {/* Background Image */}
-          <div className="background-image"></div>
+          {/* Background Image
+          <div className="background-image"></div> */}
 
           {/* Main Content */}
           <div className="stack">
             <img src={logo} alt="Game Logo" className="logo" />
-            <button className="start-button" onClick={handleOnClick}>
-              Enter
-            </button>
+            {false && showConnect ?
+              <EtfContext.Provider value={{ etf }} >
+                <WalletConnect setSigner={handleSignerChange} />
+              </EtfContext.Provider>
+              :
+              <button className="start-button" onClick={handleOnClick}>
+                Enter
+              </button>
+            }
           </div>
 
           {/* Footer */}

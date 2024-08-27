@@ -1,8 +1,8 @@
 /* global BigInt */
 import { web3Enable, web3Accounts, web3FromAddress } from "@polkadot/extension-dapp";
 import { useContext, useEffect, useState } from 'react';
-import { EtfContext } from "../../EtfContext";
-import Modal from "../common/modal";
+import { EtfContext } from "../EtfContext";
+import Modal from "react-modal";
 
 import './connect.component.css';
 

@@ -3,7 +3,7 @@
 use idl_contract_extension::idn_ext::IDNEnvironment;
 
 #[ink::contract(env = IDNEnvironment)]
-mod transmutation {
+mod tidebound {
 
     use crate::IDNEnvironment;
 
@@ -31,6 +31,35 @@ mod transmutation {
         deadline: BlockNumber,
     }
 
+    // #[derive(PartialEq, Debug, scale::Decode, scale::Encode)]
+    // #[cfg_attr(
+    //     feature = "std",
+    //     derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
+    // )]
+    // pub struct AxialHex<C> {
+    //     q: C,
+    //     r: C,
+    // }
+    
+    // #[derive(PartialEq, Debug, scale::Decode, scale::Encode)]
+    // #[cfg_attr(
+    //     feature = "std",
+    //     derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
+    // )]
+    // pub struct AxialHexGrid<C> {
+    //     hexes: Vec<AxialHex<C>>
+    // }
+
+    // impl<C> AxialHexGrid<C> {
+    //     // generate a `size` sized 
+    //     pub fn generate(size: u8) -> Self {
+
+    //         AxialHexGrid {
+    //             hexes: Vec::new()
+    //         }
+    //     }
+    // }
+
     #[derive(PartialEq, Debug, scale::Decode, scale::Encode)]
     #[cfg_attr(
         feature = "std",
@@ -47,7 +76,9 @@ mod transmutation {
     }
 
     #[ink(storage)]
-    pub struct Transmutation {
+    pub struct Tidebound {
+        // TODO
+        // hex_grid: Vec<u8>,
         /// mock to track ownership of assets
         /// in real life this like would be 
         /// a reference to some NFT contract
@@ -66,7 +97,7 @@ mod transmutation {
     }
 
 
-    impl Transmutation {
+    impl Tidebound {
         #[ink(constructor, payable)]
         pub fn new() -> Self {
             Self {
@@ -85,7 +116,7 @@ mod transmutation {
 
         /// generates a random seed
         #[ink(message)]
-        pub fn random_seed(
+        pub fn create_island(
             &mut self,
             input_seed: [u8;48],
         ) -> Result<(), Error> {
@@ -107,7 +138,7 @@ mod transmutation {
         }
 
         #[ink(message)]
-        pub fn destroy_seed(&mut self) -> Result<(), Error> {
+        pub fn destroy_island(&mut self) -> Result<(), Error> {
             let caller = self.env().caller();
 
             if let Some(asset) = self.registry_lookup(caller) {

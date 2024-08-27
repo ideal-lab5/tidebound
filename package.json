@@ -4,34 +4,37 @@
   "private": true,
   "dependencies": {
     "@chainsafe/libp2p-gossipsub": "^13.2.0",
-    "@chainsafe/libp2p-noise": "^15.1.1",
-    "@chainsafe/libp2p-yamux": "^6.0.2",
-    "@libp2p/bootstrap": "^10.1.5",
-    "@libp2p/identify": "^2.1.5",
-    "@libp2p/pubsub": "^9.0.26",
-    "@libp2p/websockets": "^8.2.0",
+    "@ideallabs/etf.js": "^0.1.12-dev",
     "@orbitdb/core": "^2.2.0",
     "@pmndrs/branding": "0.0.8",
+    "@polkadot/api-contract": "^12.4.2",
+    "@polkadot/util-crypto": "^13.0.2",
     "@react-three/drei": "9.34.4",
     "@react-three/fiber": "8.8.10",
     "@react-three/rapier": "0.8.2",
     "@types/three": "0.144.0",
+    "buffer": "^6.0.3",
+    "crypto": "^1.0.1",
+    "crypto-browserify": "^3.12.0",
     "helia": "^4.2.5",
     "leva": "^0.9.35",
     "libp2p": "^1.9.2",
+    "process": "^0.11.10",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-loader-spinner": "^6.1.6",
+    "react-modal": "^3.16.1",
     "react-scripts": "5.0.1",
     "simplex-noise": "4.0.1",
+    "stream-browserify": "^3.0.0",
     "three": "0.145.0",
     "three-noise": "^1.1.2",
     "zustand": "3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -61,5 +64,8 @@
     "ideal-network",
     "tidebound"
   ],
-  "description": "Tidebound implementation."
+  "description": "Tidebound implementation.",
+  "devDependencies": {
+    "@craco/craco": "^7.1.0"
+  }
 }

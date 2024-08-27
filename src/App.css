@@ -1,3 +1,5 @@
+@font-face { font-family: nautica; src: url('../public/Nautica.ttf'); } 
+
 /* Basic reset and full-page setup */
 html,
 body {

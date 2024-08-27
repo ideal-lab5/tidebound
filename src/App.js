@@ -4,23 +4,40 @@ import { Physics } from "@react-three/rapier";
 import { Ground } from "./Ground";
 import { Player } from "./Player";
 import { useState, useEffect } from "react";
+import Home from "./components/home/home.component";
+import Game from "./components/game.component";
 
 export default function App() {
-    const [terrainRef, setTerrainRef] = useState(null);
-    const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0, z: 0 });
 
-    // Function to update player position
-    const updatePlayerPosition = (position) => {
-        setPlayerPosition({
-            x: position.x.toFixed(2),
-            y: position.y.toFixed(2),
-            z: position.z.toFixed(2),
-        });
-    };
+    const [ready, set] = useState(false)
+    const [showGame, setShowGame] = useState(false);
+    // const [terrainRef, setTerrainRef] = useState(null);
+    // const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0, z: 0 });
+
+    // // Function to update player position
+    // const updatePlayerPosition = (position) => {
+    //     setPlayerPosition({
+    //         x: position.x.toFixed(2),
+    //         y: position.y.toFixed(2),
+    //         z: position.z.toFixed(2),
+    //     });
+    // };
+
+    const handleShowGame = () => {
+        setShowGame(true)
+        set(true)
+    }
 
     return (
         <>
-            <KeyboardControls
+            {!showGame ?
+                <Home onEnterGame={handleShowGame} /> :
+                <div className={`fullscreen bg ready`}>
+                {/* <div className="fullscreen bg"> */}
+                    <Game />
+                </div>
+            }
+            {/* <KeyboardControls
                 map={[
                     { name: "forward", keys: ["ArrowUp", "w", "W"] },
                     { name: "backward", keys: ["ArrowDown", "s", "S"] },
@@ -55,14 +72,14 @@ export default function App() {
                     <li><strong>S</strong> / <strong>Arrow Down</strong> - Move Backward</li>
                     <li><strong>A</strong> / <strong>Arrow Left</strong> - Move Left</li>
                     <li><strong>D</strong> / <strong>Arrow Right</strong> - Move Right</li>
-                    <li><strong>Space</strong> - Jump / Move Up</li>
-                    <li><strong>Shift</strong> - Move Down</li>
+                    <li><strong>Space</strong> - Ascend</li>
+                    <li><strong>Shift</strong> - Descend</li>
                 </ul>
                 <h2>Position:</h2>
                 <p>x: {playerPosition.x}</p>
                 <p>y: {playerPosition.y}</p>
                 <p>z: {playerPosition.z}</p>
-            </div>
+            </div> */}
         </>
     );
 }
