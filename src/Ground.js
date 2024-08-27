@@ -7,8 +7,12 @@ import Trees from "./geometry/Trees";
 import Grass from "./geometry/Grass";
 import Clouds from "./geometry/Clouds";
 import useHexagonScatter from "./hooks/useHexagonScatter";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, memo } from "react";
 import appState from "./state/appState";
+
+const TreesMemoized = memo(Trees);
+const GrassMemoized = memo(Grass);
+const CloudsMemoized = memo(Clouds);
 
 export function Ground({ setTerrainRef, ...props }) {
     const points = useHexagonScatter(25);
@@ -17,13 +21,10 @@ export function Ground({ setTerrainRef, ...props }) {
     const texture = useTexture(grass);
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
-    // Create a ref for the Terrain component
     const terrainRef = useRef();
 
-    // Pass the ref to the parent component
     useEffect(() => {
         if (terrainRef) {
-            console.log('setting terrain ref')
             setTerrainRef(terrainRef);
         }
     }, [setTerrainRef]);
@@ -31,10 +32,9 @@ export function Ground({ setTerrainRef, ...props }) {
     return (
         <RigidBody {...props} type="fixed" colliders={false}>
             <group rotation-x={-Math.PI / 2}>
-                {general.Trees && <Trees points={points} />}
-                {general.Grass && <Grass points={points} />}
-                {general.Clouds && <Clouds />}
-                {/* <Terrain points={points} /> */}
+                {general.Trees && <TreesMemoized points={points} />}
+                {general.Grass && <GrassMemoized points={points} />}
+                {general.Clouds && <CloudsMemoized />}
                 <Terrain ref={terrainRef} points={points} />
             </group>
             <CuboidCollider args={[1000, 2, 1000]} position={[0, -2, 0]} />
