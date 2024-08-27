@@ -26,7 +26,6 @@ npm run start
 
 ## TODOs
 - [ ] p2p communication via orbitdb
-- [ ] investigate latency due to constant geometry re-rendering
 - [ ] implement 'factory' contract to enable multiple instances of the game
 - [ ] develop axial hex grid to track world in contract storage
 - [ ] R&D Tidal Energy (points)
