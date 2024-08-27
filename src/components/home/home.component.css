@@ -1,110 +1,147 @@
-/* Container for the main content */
-.container {
+/* Main Asset Management Screen */
+.asset-management-screen {
+    display: flex;
+    height: 100vh;
+    background: linear-gradient(135deg, #000428, #004e92); /* Dark blue gradient */
+    color: #fff;
+    font-family: 'Roboto Mono', monospace; /* Clean, technical font */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #001f3f;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    border-right: 3px solid #ffcc00; /* Bright yellow accent */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.sidebar-header {
     padding: 20px;
-    background-color: #0a2b36; /* Dark ocean blue for a piratey feel */
-    height: 100vh;
-    color: #e0d6b4; /* Weathered parchment color */
-    font-family: 'Pirata One', serif; /* Pirate-themed font */
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8); /* Shadow for a rugged look */
-}
-
-/* Main title styling */
-.title {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #d4af37; /* Rich gold for a treasure-like contrast */
-    font-family: 'Pirata One', serif; /* Consistent pirate theme */
-    text-shadow: 0 0 15px rgba(0, 0, 0, 0.8); /* Deep shadow */
-}
-
-/* Content section layout */
-.content {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    max-width: 800px;
-}
-
-/* Section for the player's island */
-.island-section {
-    flex: 1;
-    margin-right: 10px;
-    padding: 20px;
-    background-color: #123848; /* Dark, stormy sea blue */
-    border-radius: 10px;
     text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Deep, shadowy borders */
-    border: 2px solid #d4af37; /* Gold trim for a touch of treasure */
+    border-bottom: 3px solid #ffcc00;
+    background-color: #00264d;
 }
 
-/* Section for other players' islands */
-.other-islands-section {
-    flex: 1;
-    margin-left: 10px;
-    padding: 20px;
-    background-color: #123848; /* Consistent dark sea blue */
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Consistent deep shadows */
-    border: 2px solid #d4af37; /* Gold trim to match the other section */
-}
-
-/* Button styling */
-.button {
-    display: inline;
-    padding: 10px 20px;
-    background-color: #d4af37; /* Treasure-like gold for buttons */
-    color: #000;
-    border: 2px solid #4a4e4d; /* Weathered wood border */
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    font-family: 'Pirata One', serif; /* Consistent font choice */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Shadow for depth */
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.button:hover {
-    background-color: #b89d2a; /* Slightly darker gold on hover */
-    transform: scale(1.05);
-}
-
-/* List of islands styling */
-.island-list {
-    list-style-type: none;
+.sidebar-tabs {
+    list-style: none;
     padding: 0;
+    margin: 0;
+    flex-grow: 1;
 }
 
-/* Individual island item */
-.island-item {
-    padding: 10px;
-    background-color: #0a2f45; /* Deep blue reminiscent of the high seas */
-    border-radius: 5px;
+.tab {
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1.1em;
+    color: #ffcc00;
+    border-bottom: 2px solid #00264d;
+}
+
+.tab:hover,
+.tab.active {
+    background-color: #004080; /* Brighten on hover or active */
+    color: #fff;
+}
+
+/* Content Area */
+.content-area {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #00264d;
+    overflow-y: auto;
+}
+
+.island-details, .worldmap-details {
+    background-color: #001f3f;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    /* transition: transform 0.2s ease-in-out; */
+    border: 3px solid #ffcc00;
+}
+
+/* World Info Container */
+.world-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    padding: 20px;
+    background-color: #001f3f;
+    border: 3px solid #ffcc00;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    /* transition: transform 0.2s ease-in-out; */
+    width: 50%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Header */
+.world-info-container h2 {
+    font-size: 2em; /* Larger font size for prominence */
+    margin-bottom: 10px;
+    color: #ffcc00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-align: center; /* Center the header text */
+}
+
+/* Paragraphs */
+.world-info-container p {
     margin: 5px 0;
-    color: #e0d6b4; /* Parchment color for text */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8); /* Shadow for a sunken treasure feel */
-    border: 1px solid #d4af37; /* Gold trim to maintain the pirate theme */
+    font-size: 1em; /* Standard font size for content */
+    color: #ffffff;
+    line-height: 1.6;
+    font-family: 'Roboto Mono', monospace; /* Clean, readable font */
+    word-wrap: break-word; /* Ensure text wraps to the next line */
+    width: 100%;
+    text-align: center; /* Center the text */
 }
 
-/* Create Island section */
+/* Seed Specific Styling */
+.world-info-container p strong {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.world-info-container p.seed {
+    font-size: 0.8em; /* Smaller font size for seed */
+    color: #cccccc; /* Lighter color for less prominence */
+    text-overflow: ellipsis; /* Truncate overflow text with ellipsis */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow text */
+}
+
+/* Buttons */
+.smash-button {
+    padding: 12px 25px; /* Slightly reduced padding for better fit */
+    background-color: #ffcc00;
+    color: #000;
+    border: 2px solid #00264d;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 20px;
+    align-self: center; /* Center the button within the container */
+}
+
+.smash-button:hover {
+    background-color: #ffaa00;
+    transform: scale(1.1);
+}
+
+
 .create-island {
+    width: 400px;
+    font-size: 20px;
     display: grid;
-    padding: 30px;
-    background-color: #123848; /* Consistent dark sea blue */
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); /* Shadow for depth */
-    border: 2px solid #d4af37; /* Gold trim */
 }
 
-.create-island > input {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    border: 2px solid #4a4e4d; /* Weathered wood border */
-    background-color: #0a2f45; /* Deep sea blue for input background */
-    color: #e0d6b4; /* Parchment color for text */
-    font-family: 'Pirata One', serif; /* Consistent font choice */
+.worldmap-details {
+    height: 100vh;
 }

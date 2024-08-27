@@ -114,8 +114,6 @@ mod tidebound {
             let caller = self.env().caller();
             let mut seed: [u8;32] = self.env().extension().random();
 
-            // let hash: &[u8] = self.env().hash_bytes(&name);
-            // let mut output = <Sha2x256 as HashOutput>::Type::default(); // 256-bit buffer (32 bytes)
             let hash = self.env().hash_bytes::<Sha2x256>(&name);
 
             hash.clone().iter().enumerate().for_each(|(i, bit)| {

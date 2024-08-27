@@ -1,4 +1,4 @@
-import "./styles.css";
+// import "./styles.css";
 import { useState, useEffect, useRef } from "react";
 import * as HC from "honeycomb-grid";
 import { Canvas } from "@react-three/fiber";
@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { Text } from "@react-three/drei";
 import { useSpring, animated } from "@react-spring/three";
 import { useDrag } from "@use-gesture/react";
+import './hex-map.css';
 
 const floorPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
 const hexTile = HC.defineHex({ dimensions: 1.1 });
@@ -18,7 +19,7 @@ const spiralGridArray = spiralGrid.toArray();
 export default function HexMap() {
   return (
     <div className="Map">
-      <div style={{ width: "90vw", height: "90vh" }}>
+      <div className="map-container">
         <Scene />
       </div>
     </div>
@@ -80,14 +81,14 @@ const HexGrid = (props) => {
           />
         );
       })}
-      <Text
+      {/* <Text
         color="black"
         fontSize={1}
         rotation={[0, 0, 0]}
         position={[0, -4, 1]}
       >
         {text}
-      </Text>
+      </Text> */}
     </group>
   );
 };

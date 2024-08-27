@@ -45,18 +45,18 @@ function Overlay() {
     }
   };
 
-    useEffect(() => {
-      // if (process.env.REACT_APP_WS_URL === undefined || process.env.REACT_APP_CONTRACT_ADDRESS === undefined) {
-      //   console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
-      //   process.kill();
-      // }
+  useEffect(() => {
+    // if (process.env.REACT_APP_WS_URL === undefined || process.env.REACT_APP_CONTRACT_ADDRESS === undefined) {
+    //   console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
+    //   process.kill();
+    // }
 
-      handleIDNConnect().then(() => {
-        console.log('connected to IDN')
-        setupOrbitDb()
-      });
+    handleIDNConnect().then(() => {
+      console.log('connected to IDN')
+      setupOrbitDb()
+    });
 
-    }, []);
+  }, []);
 
   const setupOrbitDb = async () => {
     const Libp2pOptions = {
@@ -139,13 +139,15 @@ function Overlay() {
 
             {/* Main Content */}
             <div className="stack">
-              <img src={logo} alt="Game Logo" className="logo" />
               {showConnect ?
                 <WalletConnect setSigner={handleSignerChange} setBalance={setBalance} />
                 :
-                <button className="start-button" onClick={handleOnClick}>
-                  Enter
-                </button>
+                <div className="stack">
+                  <img src={logo} alt="Game Logo" className="logo" />
+                  <button className="start-button" onClick={handleOnClick}>
+                    Enter
+                  </button>
+                </div>
               }
             </div>
 

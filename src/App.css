@@ -1,4 +1,5 @@
 @font-face { font-family: nautica; src: url('../public/Nautica.ttf'); } 
+@font-face { font-family: seaweed; src: url('../public/SeaweedScript-Regular.ttf'); } 
 
 /* Basic reset and full-page setup */
 html,
@@ -7,7 +8,7 @@ body {
     padding: 0;
     height: 100%;
     overflow: hidden;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'seaweed', cursive;
     /* Retro game font */
 }
 
@@ -35,9 +36,9 @@ body {
 
 /* Stack Container Styling */
 .stack {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
 }
 
 /* Logo Styling */
@@ -61,13 +62,16 @@ body {
     background-color: #ffcc00;
     color: #000;
     font-size: 18px;
-    padding: 15px 30px;
+    padding: 30px 30px;
+    margin: 30%;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
     transition: background-color 0.3s, transform 0.2s;
+    font-family: 'seaweed';
+    font-size: 50px;
 }
 
 .start-button:hover {
