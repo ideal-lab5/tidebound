@@ -41,11 +41,11 @@ function Overlay() {
     //   console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
     //   process.kill();
     // }
-    
-    // handleIDNConnect().then(() => {
-    //   console.log('connected to IDN')
-    //   setupOrbitDb()
-    // });
+
+    handleIDNConnect().then(() => {
+      console.log('connected to IDN')
+      setupOrbitDb()
+    });
 
   }, []);
 
@@ -101,7 +101,7 @@ function Overlay() {
     await etf.init()
     setEtf(etf)
 
-    const contract = new ContractPromise(etf.api, abi, process.env.REACT_APP_CONTRACT_ADDRESS);
+    const contract = new ContractPromise(etf.api, abi, "5GkWK9j8swFh6Z6SPi55Sdmb2NHYXkJrjyLRuecscYmVdnzM");
     setContract(contract);
 
     const _unsubscribe = await etf.api.rpc.chain.subscribeNewHeads((header) => {
@@ -115,40 +115,39 @@ function Overlay() {
   }, []);
 
   function handleOnClick() {
-    set(true)
-    // setShowConnect(true)
+    setShowConnect(true)
   }
 
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Captain's+Quarters:wght@400&display=swap" rel="stylesheet"></link>
-      <App />
-      <div className="overlay" />
-      <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
-        <div className="start-screen">
-          {/* Background Image
+      <EtfContext.Provider value={{ etf, signer, contract }} >
+        <App />
+        <div className="overlay" />
+        <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
+          <div className="start-screen">
+            {/* Background Image
           <div className="background-image"></div> */}
 
-          {/* Main Content */}
-          <div className="stack">
-            <img src={logo} alt="Game Logo" className="logo" />
-            {false && showConnect ?
-              <EtfContext.Provider value={{ etf }} >
+            {/* Main Content */}
+            <div className="stack">
+              <img src={logo} alt="Game Logo" className="logo" />
+              {showConnect ?
                 <WalletConnect setSigner={handleSignerChange} />
-              </EtfContext.Provider>
-              :
-              <button className="start-button" onClick={handleOnClick}>
-                Enter
-              </button>
-            }
-          </div>
+                :
+                <button className="start-button" onClick={handleOnClick}>
+                  Enter
+                </button>
+              }
+            </div>
 
-          {/* Footer */}
-          <div className="footer">
-            <p>© 2024 Ideal Labs. All Rights Reserved.</p>
+            {/* Footer */}
+            <div className="footer">
+              <p>© 2024 Ideal Labs. All Rights Reserved.</p>
+            </div>
           </div>
         </div>
-      </div>
+      </EtfContext.Provider>
     </>
   )
 }

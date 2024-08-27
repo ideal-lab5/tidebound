@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './home.component.css';
 import Modal from 'react-modal';
+import { createIsland } from '../../services/contract.service';
+import { EtfContext } from '../../EtfContext';
 
 const customStyles = {
     content: {
@@ -28,6 +30,8 @@ function Home(props) {
     const [showModal, setShowModal] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
 
+    const { etf, signer, contract } = useContext(EtfContext);
+
     useEffect(() => {
         // Mock data for demonstration
         const mockPlayerIsland = null;//{ name: "My Island", seed: ["Asset1", "Asset2"] };
@@ -41,19 +45,24 @@ function Home(props) {
         setOtherIslands(mockOtherIslands);
     }, []);
 
-    const handleCreateIsland = () => {
+    const handleCreateIslandModal = async () => {
         setShowModal(true);
     }
 
-    const handleCloseModal = () => {
+    const handleCloseModal = async () => {
         setShowModal(false)
         setShowLoading(true);
-        // mock
-        setTimeout(() => {
-            setShowLoading(false);
-            setPlayerIsland({name: "my island", seed: ["0x0adfjkadfj38d8af894..."]});
 
-        }, 5000);
+        await createIsland(etf, signer, 'my island is hot', contract, () => {
+            setShowLoading(false);
+            // todo: query island
+        });
+        // mock
+        // setTimeout(() => {
+        //     setShowLoading(false);
+        //     setPlayerIsland({name: "my island", seed: ["0x0adfjkadfj38d8af894..."]});
+
+        // }, 5000);
     }
 
     return (
@@ -74,7 +83,7 @@ function Home(props) {
                         ) : (
                             <div className="island-section">
                                 <h2>Create Your Island</h2>
-                                <button className="button" onClick={handleCreateIsland}>Create Island</button>
+                                <button className="button" onClick={handleCreateIslandModal}>Create Island</button>
                                 <Modal
                                     isOpen={showModal}
                                     onRequestClose={handleCloseModal}
