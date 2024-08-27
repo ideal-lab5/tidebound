@@ -24,6 +24,7 @@ import { createLibp2p } from 'libp2p'
 import logo from './resources/logo.png';
 import WalletConnect from "./connect/connect.component";
 import { EtfContext } from "./EtfContext";
+import chainspec from './resources/etfTestSpecRaw.json';
 
 
 function Overlay() {
@@ -35,19 +36,27 @@ function Overlay() {
 
   const [contract, setContract] = useState(null);
   const [latestBlock, setLatestBlock] = useState(null)
+  const [balance, setBalance] = useState(0);
 
-  useEffect(() => {
-    // if (process.env.REACT_APP_WS_URL === undefined || process.env.REACT_APP_CONTRACT_ADDRESS === undefined) {
-    //   console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
-    //   process.kill();
-    // }
+  const CustomTypes = {
+    Island: {
+      name: '[u8;32]',
+      seed: '[u8;32]',
+    }
+  };
 
-    handleIDNConnect().then(() => {
-      console.log('connected to IDN')
-      setupOrbitDb()
-    });
+    useEffect(() => {
+      // if (process.env.REACT_APP_WS_URL === undefined || process.env.REACT_APP_CONTRACT_ADDRESS === undefined) {
+      //   console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
+      //   process.kill();
+      // }
 
-  }, []);
+      handleIDNConnect().then(() => {
+        console.log('connected to IDN')
+        setupOrbitDb()
+      });
+
+    }, []);
 
   const setupOrbitDb = async () => {
     const Libp2pOptions = {
@@ -98,10 +107,10 @@ function Overlay() {
     // let ws = process.env.REACT_APP_WS_URL;
     let ws = 'ws://127.0.0.1:9944';
     let etf = new Etf(ws, false)
-    await etf.init()
+    await etf.init(chainspec, CustomTypes)
     setEtf(etf)
 
-    const contract = new ContractPromise(etf.api, abi, "5GkWK9j8swFh6Z6SPi55Sdmb2NHYXkJrjyLRuecscYmVdnzM");
+    const contract = new ContractPromise(etf.api, abi, "5C5NjfY6ASQ1S3T3MZhF5H8mFF6yHqfTcXApWcDsi8ULMSZx");
     setContract(contract);
 
     const _unsubscribe = await etf.api.rpc.chain.subscribeNewHeads((header) => {
@@ -120,8 +129,7 @@ function Overlay() {
 
   return (
     <>
-      <link href="https://fonts.googleapis.com/css2?family=Captain's+Quarters:wght@400&display=swap" rel="stylesheet"></link>
-      <EtfContext.Provider value={{ etf, signer, contract }} >
+      <EtfContext.Provider value={{ etf, signer, contract, balance }} >
         <App />
         <div className="overlay" />
         <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
@@ -133,7 +141,7 @@ function Overlay() {
             <div className="stack">
               <img src={logo} alt="Game Logo" className="logo" />
               {showConnect ?
-                <WalletConnect setSigner={handleSignerChange} />
+                <WalletConnect setSigner={handleSignerChange} setBalance={setBalance} />
                 :
                 <button className="start-button" onClick={handleOnClick}>
                   Enter

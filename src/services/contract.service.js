@@ -6,7 +6,7 @@ import { BN, BN_ONE } from "@polkadot/util";
 
 const MAX_CALL_WEIGHT2 = new BN(1_000_000_000_000).isub(BN_ONE);
 const MAX_CALL_WEIGHT = new BN(5_000_000_000_000).isub(BN_ONE);
-const PROOFSIZE = new BN(1_000_000_000);
+const PROOFSIZE = new BN(2_000_000_000);
 
 export async function createIsland(etf, signer, name, transmutationContract, callback) {
     await transmutationContract.tx
@@ -22,6 +22,21 @@ export async function createIsland(etf, signer, name, transmutationContract, cal
                 callback(result);
             // }
         });
+}
+
+export async function queryIslandRegistry(etf, signer, contract, who) {
+    const { gasRequired, storageDeposit, result, output } =  
+        await contract.query.getIsland(signer.address, 
+            {
+                gasLimit: etf.createType('WeightV2', {
+                    refTime: MAX_CALL_WEIGHT2,
+                    proofSize: PROOFSIZE,
+                }),
+                storageDepositLimit: null,
+            }, 
+        who,
+    );
+    return result.toHuman()
 }
 
 // export async function tryNewSwap(etf, signer, transmutationContract, who, when, callback) {

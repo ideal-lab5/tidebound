@@ -183,7 +183,7 @@ function WorldView() {
          // console.log('updating generation with data ' + data);
          let rng = csprngFromSeed(data);
          setGenerationSeed(rng());
-         // setGeneration('Trees', rng());
+         setGeneration('Trees', rng());
          setGeneral('Trees', rng());
          setGeneral('Grass', rng());
          setGeneral('Water', rng());

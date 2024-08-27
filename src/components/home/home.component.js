@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './home.component.css';
 import Modal from 'react-modal';
-import { createIsland } from '../../services/contract.service';
+import { createIsland, queryIslandRegistry } from '../../services/contract.service';
+import { hexToU8a, hexToString, u8aToString } from '@polkadot/util';
 import { EtfContext } from '../../EtfContext';
+import appState from '../../state/appState';
+import SHA3 from 'sha3';
+import seedrandom from 'seedrandom';
 
 const customStyles = {
     content: {
@@ -30,20 +34,73 @@ function Home(props) {
     const [showModal, setShowModal] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
 
-    const { etf, signer, contract } = useContext(EtfContext);
+    // function to update the app state for game generation
+    const setGenerationSeed = appState((s) => s.setSeed);
+    const setGeneral = appState((s) => s.setGeneral);
+
+    const { etf, signer, contract, balance } = useContext(EtfContext);
 
     useEffect(() => {
         // Mock data for demonstration
         const mockPlayerIsland = null;//{ name: "My Island", seed: ["Asset1", "Asset2"] };
         const mockOtherIslands = [
-            { id: 1, name: "Island One" },
-            { id: 2, name: "Island Two" },
-            { id: 3, name: "Island Three" },
+            { seed: "1", name: "Island One" },
+            { seed: "2", name: "Island Two" },
+            { seed: "3", name: "Island Three" },
         ];
 
-        setPlayerIsland(mockPlayerIsland);
-        setOtherIslands(mockOtherIslands);
-    }, []);
+
+
+        if (signer) {
+            queryIsland().then(() => {
+                setOtherIslands(mockOtherIslands);
+            });
+        }
+    }, [signer]);
+
+    const csprngFromSeed = (seed) => {
+        const hash = new SHA3(512);
+        // we need to go from 48 bytes to 32
+        hash.update(seed);
+        let out = hash.digest();
+        let csprng = seedrandom(out);
+        return csprng;
+     }
+  
+    //  const randomFromSeed = (seed) => {
+    //     const hash = new SHA3(512);
+    //     // we need to go from 48 bytes to 32
+    //     hash.update(seed);
+    //     let out = hash.digest();
+    //     let csprng = seedrandom(out);
+    //     let rand = csprng().toString();
+    //     return rand;
+    //  }
+
+    const queryIsland = async () => {
+        let islandData = await queryIslandRegistry(etf, signer, contract, signer.address);
+        // Assuming islandData is in the form { Ok: { flags: [], data: "0x..." } }
+        const rawIslandData = islandData.Ok.data;
+        console.log(islandData)
+        // Convert the raw data into a u8a (if it's in hex form)
+        const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
+        let islandName = u8aToString(islandU8a.slice(4, 35));
+        let islandSeed = islandU8a.slice(36);
+        let island = { name: islandName, seed: islandSeed };
+        console.log(island)
+        setPlayerIsland(island)
+        
+        let rng = csprngFromSeed(u8aToString(island.seed));
+        setGenerationSeed(rng());
+        setGeneral('Trees', rng());
+        setGeneral('Grass', rng());
+        setGeneral('Water', rng());
+        setGeneral('Clouds', rng());
+
+        // console.log('set generation seed');
+        // console.log(rng())
+
+    }
 
     const handleCreateIslandModal = async () => {
         setShowModal(true);
@@ -53,10 +110,19 @@ function Home(props) {
         setShowModal(false)
         setShowLoading(true);
 
-        await createIsland(etf, signer, 'my island is hot', contract, () => {
+        try {
+            let name = 'my island is so hot right now!!!';
+            await createIsland(etf, signer, name, contract, async (result) => {
+                if (result.status.isInBlock) {
+                    await queryIsland();
+                }
+            });
             setShowLoading(false);
-            // todo: query island
-        });
+        } catch (e) {
+            console.log(e);
+            setShowLoading(false);
+        }
+
         // mock
         // setTimeout(() => {
         //     setShowLoading(false);
@@ -68,10 +134,14 @@ function Home(props) {
     return (
         <div className="container">
             <h1 className="title">Island Management</h1>
+            <div className='player-details island-section'>
+                <span>AccountId: {signer ? signer.address : ''}</span>
+                <span>Balance: {balance}</span>
+            </div>
             <div className="content">
                 {showLoading ? <div className='island-section'>
                     Loading...
-                    </div> :
+                </div> :
                     <div>
                         {playerIsland ? (
                             <div className="island-section">

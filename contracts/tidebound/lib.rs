@@ -9,27 +9,32 @@ mod tidebound {
 
     use ink::prelude::vec::Vec;
     use ink::storage::Mapping;
-    use rs_merkle::{
-        algorithms::Sha256,
-        Hasher,
-        MerkleTree,
+    use ink::env::hash::{
+        HashOutput,
+        Sha2x256,
     };
 
-    /// a dummy type to represent an asset
-    pub type OpaqueAssetId = Vec<u8>;
+    // use rs_merkle::{
+    //     algorithms::Sha256,
+    //     Hasher,
+    //     MerkleTree,
+    // };
 
-    /// represents a swap between two participants
-    #[derive(PartialEq, Debug, scale::Decode, scale::Encode)]
-    #[cfg_attr(
-        feature = "std",
-        derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
-    )]
-    pub struct Swap {
-        asset_id_one: OpaqueAssetId,
-        asset_id_two: OpaqueAssetId,
-        /// the deadline when the swap must complete
-        deadline: BlockNumber,
-    }
+    // /// a dummy type to represent an asset
+    // pub type OpaqueAssetId = Vec<u8>;
+
+    // /// represents a swap between two participants
+    // #[derive(PartialEq, Debug, scale::Decode, scale::Encode)]
+    // #[cfg_attr(
+    //     feature = "std",
+    //     derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
+    // )]
+    // pub struct Swap {
+    //     asset_id_one: OpaqueAssetId,
+    //     asset_id_two: OpaqueAssetId,
+    //     /// the deadline when the swap must complete
+    //     deadline: BlockNumber,
+    // }
 
     // #[derive(PartialEq, Debug, scale::Decode, scale::Encode)]
     // #[cfg_attr(
@@ -66,8 +71,8 @@ mod tidebound {
         derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
     )]
     pub struct Island {
-        pub name: OpaqueAssetId,
-        pub seed: OpaqueAssetId,
+        pub name: [u8;32],
+        pub seed: [u8;32],
     }
 
     #[derive(PartialEq, Debug, scale::Decode, scale::Encode)]
@@ -76,34 +81,14 @@ mod tidebound {
         derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
     )]
     pub enum Error {
-        InvalidBlockNumber,
-        InvalidMerkleTree,
-        SwapDNE,
-        DuplicateSeed,
-        InvalidSwap,
-        NoOwnedAsset,
-        NoSuchAsset,
+        InvalidName,
     }
 
     #[ink(storage)]
     pub struct Tidebound {
         // TODO
         // hex_grid: Vec<u8>,
-        /// mock to track ownership of assets
-        /// in real life this like would be 
-        /// a reference to some NFT contract
         island_registry: Mapping<AccountId, Island>,
-        /// a temp registry to hold 'in transit' assets
-        asset_status: Mapping<OpaqueAssetId, Hash>,
-        /// a collection of all claimed assets
-        claimed_assets: Vec<OpaqueAssetId>,
-        /// only one asset per account
-        // mock_asset_ownership: Mapping<AccountId, OpaqueAssetId>,
-        /// a mapping of all swaps
-        /// any pair of accounts can only have one active swap
-        swaps: Mapping<Hash, Swap>,
-        /// a map between account and swaps they can participate in
-        pending_swaps: Mapping<AccountId, Hash>,
     }
 
 
@@ -112,10 +97,6 @@ mod tidebound {
         pub fn new() -> Self {
             Self {
                 island_registry: Mapping::new(),
-                asset_status: Mapping::new(),
-                claimed_assets: Vec::new(),
-                swaps: Mapping::new(),
-                pending_swaps: Mapping::new(),
             }
         }
 
@@ -128,22 +109,24 @@ mod tidebound {
         #[ink(message)]
         pub fn create_island(
             &mut self,
-            name: [u8;16],
+            name: [u8;32],
         ) -> Result<(), Error> {
             let caller = self.env().caller();
-            let mut seed = self.env().extension().random();
-            
-            let mut c: &[u8] = caller.as_ref();
-            c.to_vec().extend(name.to_vec());
+            let mut seed: [u8;32] = self.env().extension().random();
 
-            c.clone().iter().enumerate().for_each(|(i, bit)| {
+            // let hash: &[u8] = self.env().hash_bytes(&name);
+            // let mut output = <Sha2x256 as HashOutput>::Type::default(); // 256-bit buffer (32 bytes)
+            let hash = self.env().hash_bytes::<Sha2x256>(&name);
+
+            hash.clone().iter().enumerate().for_each(|(i, bit)| {
                 seed[i] = seed[i] ^ bit;
             });
 
             let island = Island {
-                name: name.to_vec(),
-                seed: seed.to_vec()
+                name: name,
+                seed: seed
             };
+
             self.island_registry.insert(caller, &island);
 
             Ok(())

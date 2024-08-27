@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x0b60be154b87c2cf08a13dccc59ce32bea88cb4d453e70e02ac6f8ad157c9e48",
+    "hash": "0xaffc7b362165c4671f55479468ee7e395aa528f1ad470c4b9aeb8693cd557a5a",
     "language": "ink! 5.0.0",
     "compiler": "rustc 1.80.0",
     "build_info": {
@@ -34,7 +34,7 @@
             "ink_primitives",
             "ConstructorResult"
           ],
-          "type": 24
+          "type": 10
         },
         "selector": "0x9bae9d5e"
       },
@@ -49,7 +49,7 @@
             "ink_primitives",
             "ConstructorResult"
           ],
-          "type": 24
+          "type": 10
         },
         "selector": "0xed4b9d1b"
       }
@@ -60,31 +60,31 @@
         "displayName": [
           "AccountId"
         ],
-        "type": 3
+        "type": 2
       },
       "balance": {
         "displayName": [
           "Balance"
         ],
-        "type": 32
+        "type": 17
       },
       "blockNumber": {
         "displayName": [
           "BlockNumber"
         ],
-        "type": 15
+        "type": 20
       },
       "chainExtension": {
         "displayName": [
           "ChainExtension"
         ],
-        "type": 34
+        "type": 21
       },
       "hash": {
         "displayName": [
           "Hash"
         ],
-        "type": 10
+        "type": 18
       },
       "maxEventTopics": 4,
       "staticBufferSize": 16384,
@@ -92,7 +92,7 @@
         "displayName": [
           "Timestamp"
         ],
-        "type": 33
+        "type": 19
       }
     },
     "events": [],
@@ -101,7 +101,7 @@
         "ink",
         "LangError"
       ],
-      "type": 25
+      "type": 11
     },
     "messages": [
       {
@@ -110,13 +110,13 @@
             "label": "name",
             "type": {
               "displayName": [],
-              "type": 26
+              "type": 3
             }
           }
         ],
         "default": false,
         "docs": [
-          " generates a random seed"
+          " generates a random seed for a hex-island"
         ],
         "label": "create_island",
         "mutates": true,
@@ -126,7 +126,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 27
+          "type": 12
         },
         "selector": "0x62bd6f2d"
       },
@@ -138,7 +138,7 @@
               "displayName": [
                 "AccountId"
               ],
-              "type": 3
+              "type": 2
             }
           }
         ],
@@ -152,7 +152,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 30
+          "type": 15
         },
         "selector": "0xa5c9c36f"
       }
@@ -171,18 +171,30 @@
                       "fields": [
                         {
                           "layout": {
-                            "leaf": {
-                              "key": "0x9f159c34",
-                              "ty": 0
+                            "array": {
+                              "layout": {
+                                "leaf": {
+                                  "key": "0x9f159c34",
+                                  "ty": 0
+                                }
+                              },
+                              "len": 32,
+                              "offset": "0x9f159c34"
                             }
                           },
                           "name": "name"
                         },
                         {
                           "layout": {
-                            "leaf": {
-                              "key": "0x9f159c34",
-                              "ty": 0
+                            "array": {
+                              "layout": {
+                                "leaf": {
+                                  "key": "0x9f159c34",
+                                  "ty": 0
+                                }
+                              },
+                              "len": 32,
+                              "offset": "0x9f159c34"
                             }
                           },
                           "name": "seed"
@@ -192,99 +204,17 @@
                     }
                   },
                   "root_key": "0x9f159c34",
-                  "ty": 2
+                  "ty": 1
                 }
               },
               "name": "island_registry"
-            },
-            {
-              "layout": {
-                "root": {
-                  "layout": {
-                    "leaf": {
-                      "key": "0x2e19db9b",
-                      "ty": 10
-                    }
-                  },
-                  "root_key": "0x2e19db9b",
-                  "ty": 11
-                }
-              },
-              "name": "asset_status"
-            },
-            {
-              "layout": {
-                "leaf": {
-                  "key": "0x00000000",
-                  "ty": 14
-                }
-              },
-              "name": "claimed_assets"
-            },
-            {
-              "layout": {
-                "root": {
-                  "layout": {
-                    "struct": {
-                      "fields": [
-                        {
-                          "layout": {
-                            "leaf": {
-                              "key": "0x71cdbc78",
-                              "ty": 0
-                            }
-                          },
-                          "name": "asset_id_one"
-                        },
-                        {
-                          "layout": {
-                            "leaf": {
-                              "key": "0x71cdbc78",
-                              "ty": 0
-                            }
-                          },
-                          "name": "asset_id_two"
-                        },
-                        {
-                          "layout": {
-                            "leaf": {
-                              "key": "0x71cdbc78",
-                              "ty": 15
-                            }
-                          },
-                          "name": "deadline"
-                        }
-                      ],
-                      "name": "Swap"
-                    }
-                  },
-                  "root_key": "0x71cdbc78",
-                  "ty": 16
-                }
-              },
-              "name": "swaps"
-            },
-            {
-              "layout": {
-                "root": {
-                  "layout": {
-                    "leaf": {
-                      "key": "0x2f0f773c",
-                      "ty": 10
-                    }
-                  },
-                  "root_key": "0x2f0f773c",
-                  "ty": 20
-                }
-              },
-              "name": "pending_swaps"
             }
           ],
           "name": "Tidebound"
         }
       },
       "root_key": "0x00000000",
-      "ty": 23
+      "ty": 9
     }
   },
   "types": [
@@ -292,9 +222,7 @@
       "id": 0,
       "type": {
         "def": {
-          "sequence": {
-            "type": 1
-          }
+          "primitive": "u8"
         }
       }
     },
@@ -302,28 +230,20 @@
       "id": 1,
       "type": {
         "def": {
-          "primitive": "u8"
-        }
-      }
-    },
-    {
-      "id": 2,
-      "type": {
-        "def": {
           "composite": {}
         },
         "params": [
           {
             "name": "K",
-            "type": 3
+            "type": 2
           },
           {
             "name": "V",
-            "type": 5
+            "type": 4
           },
           {
             "name": "KeyType",
-            "type": 6
+            "type": 5
           }
         ],
         "path": [
@@ -335,13 +255,13 @@
       }
     },
     {
-      "id": 3,
+      "id": 2,
       "type": {
         "def": {
           "composite": {
             "fields": [
               {
-                "type": 4,
+                "type": 3,
                 "typeName": "[u8; 32]"
               }
             ]
@@ -355,31 +275,31 @@
       }
     },
     {
-      "id": 4,
+      "id": 3,
       "type": {
         "def": {
           "array": {
             "len": 32,
-            "type": 1
+            "type": 0
           }
         }
       }
     },
     {
-      "id": 5,
+      "id": 4,
       "type": {
         "def": {
           "composite": {
             "fields": [
               {
                 "name": "name",
-                "type": 0,
-                "typeName": "OpaqueAssetId"
+                "type": 3,
+                "typeName": "[u8; 32]"
               },
               {
                 "name": "seed",
-                "type": 0,
-                "typeName": "OpaqueAssetId"
+                "type": 3,
+                "typeName": "[u8; 32]"
               }
             ]
           }
@@ -392,7 +312,7 @@
       }
     },
     {
-      "id": 6,
+      "id": 5,
       "type": {
         "def": {
           "composite": {}
@@ -400,11 +320,11 @@
         "params": [
           {
             "name": "L",
-            "type": 7
+            "type": 6
           },
           {
             "name": "R",
-            "type": 8
+            "type": 7
           }
         ],
         "path": [
@@ -415,7 +335,7 @@
       }
     },
     {
-      "id": 7,
+      "id": 6,
       "type": {
         "def": {
           "composite": {}
@@ -428,7 +348,7 @@
       }
     },
     {
-      "id": 8,
+      "id": 7,
       "type": {
         "def": {
           "composite": {}
@@ -436,7 +356,7 @@
         "params": [
           {
             "name": "ParentKey",
-            "type": 9
+            "type": 8
           }
         ],
         "path": [
@@ -447,7 +367,7 @@
       }
     },
     {
-      "id": 9,
+      "id": 8,
       "type": {
         "def": {
           "tuple": []
@@ -455,314 +375,15 @@
       }
     },
     {
-      "id": 10,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "type": 4,
-                "typeName": "[u8; 32]"
-              }
-            ]
-          }
-        },
-        "path": [
-          "ink_primitives",
-          "types",
-          "Hash"
-        ]
-      }
-    },
-    {
-      "id": 11,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "K",
-            "type": 0
-          },
-          {
-            "name": "V",
-            "type": 10
-          },
-          {
-            "name": "KeyType",
-            "type": 12
-          }
-        ],
-        "path": [
-          "ink_storage",
-          "lazy",
-          "mapping",
-          "Mapping"
-        ]
-      }
-    },
-    {
-      "id": 12,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "L",
-            "type": 7
-          },
-          {
-            "name": "R",
-            "type": 13
-          }
-        ],
-        "path": [
-          "ink_storage_traits",
-          "impls",
-          "ResolverKey"
-        ]
-      }
-    },
-    {
-      "id": 13,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "ParentKey",
-            "type": 9
-          }
-        ],
-        "path": [
-          "ink_storage_traits",
-          "impls",
-          "ManualKey"
-        ]
-      }
-    },
-    {
-      "id": 14,
-      "type": {
-        "def": {
-          "sequence": {
-            "type": 0
-          }
-        }
-      }
-    },
-    {
-      "id": 15,
-      "type": {
-        "def": {
-          "primitive": "u32"
-        }
-      }
-    },
-    {
-      "id": 16,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "K",
-            "type": 10
-          },
-          {
-            "name": "V",
-            "type": 17
-          },
-          {
-            "name": "KeyType",
-            "type": 18
-          }
-        ],
-        "path": [
-          "ink_storage",
-          "lazy",
-          "mapping",
-          "Mapping"
-        ]
-      }
-    },
-    {
-      "id": 17,
-      "type": {
-        "def": {
-          "composite": {
-            "fields": [
-              {
-                "name": "asset_id_one",
-                "type": 0,
-                "typeName": "OpaqueAssetId"
-              },
-              {
-                "name": "asset_id_two",
-                "type": 0,
-                "typeName": "OpaqueAssetId"
-              },
-              {
-                "name": "deadline",
-                "type": 15,
-                "typeName": "BlockNumber"
-              }
-            ]
-          }
-        },
-        "path": [
-          "transmutation",
-          "tidebound",
-          "Swap"
-        ]
-      }
-    },
-    {
-      "id": 18,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "L",
-            "type": 7
-          },
-          {
-            "name": "R",
-            "type": 19
-          }
-        ],
-        "path": [
-          "ink_storage_traits",
-          "impls",
-          "ResolverKey"
-        ]
-      }
-    },
-    {
-      "id": 19,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "ParentKey",
-            "type": 9
-          }
-        ],
-        "path": [
-          "ink_storage_traits",
-          "impls",
-          "ManualKey"
-        ]
-      }
-    },
-    {
-      "id": 20,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "K",
-            "type": 3
-          },
-          {
-            "name": "V",
-            "type": 10
-          },
-          {
-            "name": "KeyType",
-            "type": 21
-          }
-        ],
-        "path": [
-          "ink_storage",
-          "lazy",
-          "mapping",
-          "Mapping"
-        ]
-      }
-    },
-    {
-      "id": 21,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "L",
-            "type": 7
-          },
-          {
-            "name": "R",
-            "type": 22
-          }
-        ],
-        "path": [
-          "ink_storage_traits",
-          "impls",
-          "ResolverKey"
-        ]
-      }
-    },
-    {
-      "id": 22,
-      "type": {
-        "def": {
-          "composite": {}
-        },
-        "params": [
-          {
-            "name": "ParentKey",
-            "type": 9
-          }
-        ],
-        "path": [
-          "ink_storage_traits",
-          "impls",
-          "ManualKey"
-        ]
-      }
-    },
-    {
-      "id": 23,
+      "id": 9,
       "type": {
         "def": {
           "composite": {
             "fields": [
               {
                 "name": "island_registry",
-                "type": 2,
+                "type": 1,
                 "typeName": "<Mapping<AccountId, Island> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<882644383u32, ()\n>,>>::Type"
-              },
-              {
-                "name": "asset_status",
-                "type": 11,
-                "typeName": "<Mapping<OpaqueAssetId, Hash> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<2614827310u32,\n()>,>>::Type"
-              },
-              {
-                "name": "claimed_assets",
-                "type": 14,
-                "typeName": "<Vec<OpaqueAssetId> as::ink::storage::traits::AutoStorableHint<\n::ink::storage::traits::ManualKey<3294145001u32, ()>,>>::Type"
-              },
-              {
-                "name": "swaps",
-                "type": 16,
-                "typeName": "<Mapping<Hash, Swap> as::ink::storage::traits::AutoStorableHint<\n::ink::storage::traits::ManualKey<2025639281u32, ()>,>>::Type"
-              },
-              {
-                "name": "pending_swaps",
-                "type": 20,
-                "typeName": "<Mapping<AccountId, Hash> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<1014435631u32,\n()>,>>::Type"
               }
             ]
           }
@@ -775,7 +396,7 @@
       }
     },
     {
-      "id": 24,
+      "id": 10,
       "type": {
         "def": {
           "variant": {
@@ -783,7 +404,7 @@
               {
                 "fields": [
                   {
-                    "type": 9
+                    "type": 8
                   }
                 ],
                 "index": 0,
@@ -792,7 +413,7 @@
               {
                 "fields": [
                   {
-                    "type": 25
+                    "type": 11
                   }
                 ],
                 "index": 1,
@@ -804,11 +425,11 @@
         "params": [
           {
             "name": "T",
-            "type": 9
+            "type": 8
           },
           {
             "name": "E",
-            "type": 25
+            "type": 11
           }
         ],
         "path": [
@@ -817,7 +438,7 @@
       }
     },
     {
-      "id": 25,
+      "id": 11,
       "type": {
         "def": {
           "variant": {
@@ -836,18 +457,7 @@
       }
     },
     {
-      "id": 26,
-      "type": {
-        "def": {
-          "array": {
-            "len": 16,
-            "type": 1
-          }
-        }
-      }
-    },
-    {
-      "id": 27,
+      "id": 12,
       "type": {
         "def": {
           "variant": {
@@ -855,7 +465,7 @@
               {
                 "fields": [
                   {
-                    "type": 28
+                    "type": 13
                   }
                 ],
                 "index": 0,
@@ -864,7 +474,7 @@
               {
                 "fields": [
                   {
-                    "type": 25
+                    "type": 11
                   }
                 ],
                 "index": 1,
@@ -876,11 +486,11 @@
         "params": [
           {
             "name": "T",
-            "type": 28
+            "type": 13
           },
           {
             "name": "E",
-            "type": 25
+            "type": 11
           }
         ],
         "path": [
@@ -889,7 +499,7 @@
       }
     },
     {
-      "id": 28,
+      "id": 13,
       "type": {
         "def": {
           "variant": {
@@ -897,7 +507,7 @@
               {
                 "fields": [
                   {
-                    "type": 9
+                    "type": 8
                   }
                 ],
                 "index": 0,
@@ -906,7 +516,7 @@
               {
                 "fields": [
                   {
-                    "type": 29
+                    "type": 14
                   }
                 ],
                 "index": 1,
@@ -918,11 +528,11 @@
         "params": [
           {
             "name": "T",
-            "type": 9
+            "type": 8
           },
           {
             "name": "E",
-            "type": 29
+            "type": 14
           }
         ],
         "path": [
@@ -931,38 +541,14 @@
       }
     },
     {
-      "id": 29,
+      "id": 14,
       "type": {
         "def": {
           "variant": {
             "variants": [
               {
                 "index": 0,
-                "name": "InvalidBlockNumber"
-              },
-              {
-                "index": 1,
-                "name": "InvalidMerkleTree"
-              },
-              {
-                "index": 2,
-                "name": "SwapDNE"
-              },
-              {
-                "index": 3,
-                "name": "DuplicateSeed"
-              },
-              {
-                "index": 4,
-                "name": "InvalidSwap"
-              },
-              {
-                "index": 5,
-                "name": "NoOwnedAsset"
-              },
-              {
-                "index": 6,
-                "name": "NoSuchAsset"
+                "name": "InvalidName"
               }
             ]
           }
@@ -975,7 +561,7 @@
       }
     },
     {
-      "id": 30,
+      "id": 15,
       "type": {
         "def": {
           "variant": {
@@ -983,7 +569,7 @@
               {
                 "fields": [
                   {
-                    "type": 31
+                    "type": 16
                   }
                 ],
                 "index": 0,
@@ -992,7 +578,7 @@
               {
                 "fields": [
                   {
-                    "type": 25
+                    "type": 11
                   }
                 ],
                 "index": 1,
@@ -1004,11 +590,11 @@
         "params": [
           {
             "name": "T",
-            "type": 31
+            "type": 16
           },
           {
             "name": "E",
-            "type": 25
+            "type": 11
           }
         ],
         "path": [
@@ -1017,7 +603,7 @@
       }
     },
     {
-      "id": 31,
+      "id": 16,
       "type": {
         "def": {
           "variant": {
@@ -1029,7 +615,7 @@
               {
                 "fields": [
                   {
-                    "type": 5
+                    "type": 4
                   }
                 ],
                 "index": 1,
@@ -1041,7 +627,7 @@
         "params": [
           {
             "name": "T",
-            "type": 5
+            "type": 4
           }
         ],
         "path": [
@@ -1050,7 +636,7 @@
       }
     },
     {
-      "id": 32,
+      "id": 17,
       "type": {
         "def": {
           "primitive": "u128"
@@ -1058,7 +644,27 @@
       }
     },
     {
-      "id": 33,
+      "id": 18,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 3,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        },
+        "path": [
+          "ink_primitives",
+          "types",
+          "Hash"
+        ]
+      }
+    },
+    {
+      "id": 19,
       "type": {
         "def": {
           "primitive": "u64"
@@ -1066,7 +672,15 @@
       }
     },
     {
-      "id": 34,
+      "id": 20,
+      "type": {
+        "def": {
+          "primitive": "u32"
+        }
+      }
+    },
+    {
+      "id": 21,
       "type": {
         "def": {
           "variant": {}

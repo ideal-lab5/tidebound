@@ -4,10 +4,13 @@ import { Physics } from "@react-three/rapier";
 import { Ground } from "../Ground";
 import { Player } from "../Player";
 import { useState, useEffect } from "react";
+import appState from "../state/appState";
 
 export default function Game() {
     const [terrainRef, setTerrainRef] = useState(null);
     const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0, z: 0 });
+
+    const general = appState((s) => s.general);
 
     // Function to update player position
     const updatePlayerPosition = (position) => {

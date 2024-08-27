@@ -38,7 +38,7 @@ function WalletConnect(props) {
     const [showWalletSelection, setShowWalletSelection] = useState(true)
     const [signerAddress, setSignerAddress] = useState("");
     const [availableAccounts, setAvailableAccounts] = useState([]);
-    const [balance, setBalance] = useState(0);
+    // const [balance, setBalance] = useState(0);
 
     const { etf } = useContext(EtfContext);
 
@@ -60,7 +60,7 @@ function WalletConnect(props) {
     const checkBalance = async (address) => {
         let bal = await etf.api.query.system.account(address);
         let bigBalance = BigInt(parseInt(bal.data.free))
-        setBalance(Number(bigBalance) || 0);
+        props.setBalance(Number(bigBalance) || 0);
     }
 
     const handleSelectWallet = (address) => async () => {
@@ -81,7 +81,7 @@ function WalletConnect(props) {
                     <span className="copy" onClick={() => navigator.clipboard.writeText(signerAddress)}>
                         Address: {signerAddress.slice(0, 4) + '...' + signerAddress.slice(signerAddress.length - 4)}
                     </span>
-                    <span>Balance: {balance} IDN</span>
+                    {/* <span>Balance: {balance} IDN</span> */}
                 </div> :
                 <div className="connect-modal-container">
                     <Modal
