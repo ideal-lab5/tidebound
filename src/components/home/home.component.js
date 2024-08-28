@@ -68,27 +68,24 @@ function Home(props) {
     }
 
     const queryIsland = async () => {
-        let islandData = await queryIslandRegistry(etf, signer, contract, signer.address);
-        console.log("Here we go buddy");
-        console.log(islandData);
-        // Assuming islandData is in the form { Ok: { flags: [], data: "0x..." } }
-        if(!islandData instanceof Error ) 
-        {
-            console.log("AGAIN");
+        try {
+            let islandData = await queryIslandRegistry(etf, signer, contract, signer.address);
+            console.log("Here we go buddy");
             console.log(islandData);
+            // Assuming islandData is in the form { Ok: { flags: [], data: "0x..." } }
             const rawIslandData = islandData.Ok.data;
             // Convert the raw data into a u8a (if it's in hex form)
             const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
-    
+        
             let islandName = u8aToString(islandU8a.slice(4, 35));
             let islandSeed = islandU8a.slice(36);
-    
+        
             if (islandName != "") {
-    
+            
                 let island = { name: islandName, seed: islandSeed };
-    
+            
                 setPlayerIsland(island)
-    
+            
                 let rng = csprngFromSeed(u8aToString(island.seed));
                 setGenerationSeed(rng());
                 setGeneral('Trees', rng());
@@ -96,6 +93,10 @@ function Home(props) {
                 setGeneral('Water', rng());
                 setGeneral('Clouds', rng());
             }
+        } catch (err) {
+            console.log("Error getting Island Registry");
+            console.log(err);
+
         }
        
     }
