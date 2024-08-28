@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import './home.component.css';
 import Modal from 'react-modal';
 import { createIsland, queryIslandRegistry } from '../../services/contract.service';
@@ -69,27 +69,35 @@ function Home(props) {
 
     const queryIsland = async () => {
         let islandData = await queryIslandRegistry(etf, signer, contract, signer.address);
+        console.log("Here we go buddy");
+        console.log(islandData);
         // Assuming islandData is in the form { Ok: { flags: [], data: "0x..." } }
-        const rawIslandData = islandData.Ok.data;
-        // Convert the raw data into a u8a (if it's in hex form)
-        const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
-
-        let islandName = u8aToString(islandU8a.slice(4, 35));
-        let islandSeed = islandU8a.slice(36);
-
-        if (islandName != "") {
-
-            let island = { name: islandName, seed: islandSeed };
-
-            setPlayerIsland(island)
-
-            let rng = csprngFromSeed(u8aToString(island.seed));
-            setGenerationSeed(rng());
-            setGeneral('Trees', rng());
-            setGeneral('Grass', rng());
-            setGeneral('Water', rng());
-            setGeneral('Clouds', rng());
+        if(!islandData instanceof Error ) 
+        {
+            console.log("AGAIN");
+            console.log(islandData);
+            const rawIslandData = islandData.Ok.data;
+            // Convert the raw data into a u8a (if it's in hex form)
+            const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
+    
+            let islandName = u8aToString(islandU8a.slice(4, 35));
+            let islandSeed = islandU8a.slice(36);
+    
+            if (islandName != "") {
+    
+                let island = { name: islandName, seed: islandSeed };
+    
+                setPlayerIsland(island)
+    
+                let rng = csprngFromSeed(u8aToString(island.seed));
+                setGenerationSeed(rng());
+                setGeneral('Trees', rng());
+                setGeneral('Grass', rng());
+                setGeneral('Water', rng());
+                setGeneral('Clouds', rng());
+            }
         }
+       
     }
 
     const handleCreateIslandModal = async () => {
@@ -164,6 +172,11 @@ function Home(props) {
                                         <button className='smash-button' onClick={handleCreateIsland}>Create</button>
                                     </div>
                                 </Modal>
+                                <Modal isOpen={showLoading}
+                                    onRequestClose={handleCloseModal}
+                                    contentLabel='Loading'
+                                    style={customStyles}
+                                > <div> HEY WE LOADING IN HERE </div></Modal>
                             </div>
                         )}
                     </div>
