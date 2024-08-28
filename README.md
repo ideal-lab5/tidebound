@@ -25,11 +25,13 @@ npm run start
 ```
 
 ## TODOs
+- [ ] split home component into multiple components & add lazy loading
 - [ ] p2p communication via orbitdb
 - [ ] implement 'factory' contract to enable multiple instances of the game
 - [ ] develop axial hex grid to track world in contract storage
 - [ ] R&D Tidal Energy (points)
 - [ ] investigate persistance of in-game items/resources
+- [ ] add audio effects (i.e. atmospheric sounds)
 
 ## License
 

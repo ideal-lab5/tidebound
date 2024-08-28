@@ -110,7 +110,7 @@ function Overlay() {
     await etf.init(chainspec, CustomTypes)
     setEtf(etf)
 
-    const contract = new ContractPromise(etf.api, abi, "5C5NjfY6ASQ1S3T3MZhF5H8mFF6yHqfTcXApWcDsi8ULMSZx");
+    const contract = new ContractPromise(etf.api, abi, "5EkLwbc5RUWZ1nroaDBrmx7CBMyqW6VL8DzSXqSgAJZs8WKy");
     setContract(contract);
 
     const _unsubscribe = await etf.api.rpc.chain.subscribeNewHeads((header) => {

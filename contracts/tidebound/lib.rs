@@ -81,14 +81,17 @@ mod tidebound {
         derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
     )]
     pub enum Error {
-        InvalidName,
+        PlayerAlreadyRegistered,
     }
 
     #[ink(storage)]
     pub struct Tidebound {
         // TODO
         // hex_grid: Vec<u8>,
+        /// all registered islands
         island_registry: Mapping<AccountId, Island>,
+        /// all players TODO: make bounded vec?
+        players: Vec<AccountId>,
     }
 
 
@@ -97,6 +100,7 @@ mod tidebound {
         pub fn new() -> Self {
             Self {
                 island_registry: Mapping::new(),
+                players: Vec::new(),
             }
         }
 
@@ -112,6 +116,12 @@ mod tidebound {
             name: [u8;32],
         ) -> Result<(), Error> {
             let caller = self.env().caller();
+
+            // reject calls from already registered players
+            if self.island_registry.contains(&caller) {
+                return Err(Error::PlayerAlreadyRegistered);
+            }
+
             let mut seed: [u8;32] = self.env().extension().random();
 
             let hash = self.env().hash_bytes::<Sha2x256>(&name);
@@ -126,6 +136,7 @@ mod tidebound {
             };
 
             self.island_registry.insert(caller, &island);
+            self.players.push(caller);
 
             Ok(())
         }
@@ -134,6 +145,13 @@ mod tidebound {
         pub fn get_island(&self, who: AccountId) -> Option<Island> {
             self.island_registry.get(who)
         }
+
+
+        #[ink(message)]
+        pub fn get_players(&self) -> Vec<AccountId> {
+            self.players.clone()
+        }
+
 
         // #[ink(message)]
         // pub fn destroy_island(&mut self) -> Result<(), Error> {

@@ -39,6 +39,20 @@ export async function queryIslandRegistry(etf, signer, contract, who) {
     return result.toHuman()
 }
 
+export async function queryPlayers(etf, signer, contract) {
+    const { gasRequired, storageDeposit, result, output } =  
+        await contract.query.getPlayers(signer.address, 
+            {
+                gasLimit: etf.createType('WeightV2', {
+                    refTime: MAX_CALL_WEIGHT2,
+                    proofSize: PROOFSIZE,
+                }),
+                storageDepositLimit: null,
+            },
+    );
+    return result.toHuman()
+}
+
 // export async function tryNewSwap(etf, signer, transmutationContract, who, when, callback) {
 //     await transmutationContract.tx
 //         .tryNewSwap({

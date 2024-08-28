@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './home.component.css';
 import Modal from 'react-modal';
-import { createIsland, queryIslandRegistry } from '../../services/contract.service';
+import { createIsland, queryIslandRegistry, queryPlayers } from '../../services/contract.service';
 import { hexToU8a, hexToString, u8aToString } from '@polkadot/util';
 import { EtfContext } from '../../EtfContext';
 import appState from '../../state/appState';
@@ -29,7 +29,7 @@ const customStyles = {
 };
 
 function Home(props) {
-    const [playerIsland, setPlayerIsland] = useState(null);
+    const [currentIsland, setCurrentIsland] = useState(null);
     const [otherIslands, setOtherIslands] = useState([]);
 
     const [showModal, setShowModal] = useState(false);
@@ -46,18 +46,39 @@ function Home(props) {
     const { etf, signer, contract, balance } = useContext(EtfContext);
 
     useEffect(() => {
-        const mockOtherIslands = [
-            { seed: "1", name: "Island One" },
-            { seed: "2", name: "Island Two" },
-            { seed: "3", name: "Island Three" },
-        ];
 
         if (signer) {
-            queryIsland().then(() => {
-                setOtherIslands(mockOtherIslands);
+            queryIsland(signer.address).then(island => {
+                if (island.seed != "") {
+                    setCurrentIsland(island);
+                }
+                queryPlayersJs();
+                // setOtherIslands(mockOtherIslands);
             });
         }
     }, [signer]);
+
+    const queryPlayersJs = async() => {
+        let players = await queryPlayers(etf, signer, contract);
+        const playersu8a = etf.createType('Bytes', players.Ok.data).toU8a().slice(4);
+
+        // assert(playersU8a % 32 === 0)
+        let numPlayers = playersu8a.length / 32;
+        let otherIslands = []
+
+        for (let i = 0; i < numPlayers; i++) {
+            let playerAccountId = etf.createType('AccountId', playersu8a.slice(i * 32, (i + 1) * 32))
+            let islandData = await queryIslandRegistry(etf, signer, contract, playerAccountId);
+            const rawIslandData = islandData.Ok.data;
+            const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
+            let islandName = u8aToString(islandU8a.slice(4, 35));
+            let islandSeed = islandU8a.slice(36);
+            let island = {'name': islandName, 'seed': islandSeed};
+            otherIslands.push(island)
+        }
+
+        setOtherIslands(otherIslands);
+    }
 
     const csprngFromSeed = (seed) => {
         const hash = new SHA3(512);
@@ -67,8 +88,8 @@ function Home(props) {
         return csprng;
     }
 
-    const queryIsland = async () => {
-        let islandData = await queryIslandRegistry(etf, signer, contract, signer.address);
+    const queryIsland = async (who) => {
+        let islandData = await queryIslandRegistry(etf, signer, contract, who);
         // Assuming islandData is in the form { Ok: { flags: [], data: "0x..." } }
         const rawIslandData = islandData.Ok.data;
         // Convert the raw data into a u8a (if it's in hex form)
@@ -77,19 +98,22 @@ function Home(props) {
         let islandName = u8aToString(islandU8a.slice(4, 35));
         let islandSeed = islandU8a.slice(36);
 
-        if (islandName != "") {
+        let island = { name: islandName, seed: islandSeed };
+        return island;
+    }
 
-            let island = { name: islandName, seed: islandSeed };
+    const handleOnEnter = async (island) => {
+        await handleSetIslandGeneration(island);
+        props.onEnterGame()
+    }
 
-            setPlayerIsland(island)
-
-            let rng = csprngFromSeed(u8aToString(island.seed));
-            setGenerationSeed(rng());
-            setGeneral('Trees', rng());
-            setGeneral('Grass', rng());
-            setGeneral('Water', rng());
-            setGeneral('Clouds', rng());
-        }
+    const handleSetIslandGeneration = async (island) => {
+        let rng = csprngFromSeed(u8aToString(island.seed));
+        setGenerationSeed(rng());
+        setGeneral('Trees', rng());
+        setGeneral('Grass', rng());
+        setGeneral('Water', rng());
+        setGeneral('Clouds', rng());
     }
 
     const handleCreateIslandModal = async () => {
@@ -109,7 +133,7 @@ function Home(props) {
             let formattedName = name.padEnd(32, ' ');
             await createIsland(etf, signer, formattedName, contract, async (result) => {
                 if (result.status.isInBlock) {
-                    await queryIsland();
+                    await queryIsland(signer.address);
                 }
             });
             setShowLoading(false);
@@ -117,6 +141,10 @@ function Home(props) {
             console.log(e);
             setShowLoading(false);
         }
+    }
+
+    const handleVisit = (island) => {
+        handleOnEnter(island);
     }
 
     return (
@@ -134,12 +162,12 @@ function Home(props) {
             <main className='content-area'>
                 {activeTab === 'your-island' && (
                     <div className='island-details'>
-                        {playerIsland ? (
+                        {currentIsland ? (
                             <div className='world-info-container'>
                                 <h2>Your Island</h2>
-                                <p><strong>Name:</strong> {playerIsland.name}</p>
-                                <p><strong>Seed:</strong> {playerIsland.seed}</p>
-                                <button className='smash-button' onClick={props.onEnterGame}>Enter</button>
+                                <p><strong>Name:</strong> {currentIsland.name}</p>
+                                <p><strong>Seed:</strong> {currentIsland.seed}</p>
+                                <button className='smash-button' onClick={() => handleOnEnter(currentIsland)}>Enter</button>
                             </div>
                         ) : (
                             <div>
@@ -154,9 +182,9 @@ function Home(props) {
                                     <div className='create-island'>
                                         <label htmlFor='name'>Name: </label>
                                         <input
-                                            id="name" 
-                                            type="text" 
-                                            placeholder='Isla Palma' 
+                                            id="name"
+                                            type="text"
+                                            placeholder='Isla Palma'
                                             maxLength={32}
                                             value={name}
                                             onChange={e => setName(e.target.value)}
@@ -172,9 +200,19 @@ function Home(props) {
                 {activeTab === 'worldmap' && (
                     <div className='worldmap-details'>
                         <h2>WorldMap</h2>
-                        <span>Coming Soon</span>
-                        <HexMap />
-                        {/* Content related to the WorldMap goes here */}
+                        <div className="other-islands-section">
+                            <h2>Other Players' Islands</h2>
+                            <ul className="island-list">
+                                {otherIslands.map((island) => (
+                                    <li key={island.seed} className="island-item">
+                                        <div>
+                                            {island.name}
+                                            <button onClick={() => handleVisit(island)}>visit</button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 )}
             </main>
@@ -196,10 +234,10 @@ export default Home;
                     Loading...
                 </div> :
                     <div>
-                        {playerIsland ? (
+                        {currentIsland ? (
                             <div className="island-section">
                                 <h2>Your Island</h2>
-                                <p><strong>Name:</strong> {playerIsland.name}</p>
+                                <p><strong>Name:</strong> {currentIsland.name}</p>
                                 <p><strong>Seed:</strong> {playerIsland.seed}</p>
                                 <button className='button' onClick={props.onEnterGame}>Enter</button>
                             </div>

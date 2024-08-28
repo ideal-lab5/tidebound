@@ -54,6 +54,10 @@
     overflow-y: auto;
 }
 
+.island-details {
+    display: inline-block;
+}
+
 .island-details, .worldmap-details {
     background-color: #001f3f;
     padding: 20px;
@@ -139,9 +143,17 @@
 .create-island {
     width: 400px;
     font-size: 20px;
+    font-family: 'roboto-mono', sans-serif;
     display: grid;
 }
 
 .worldmap-details {
     height: 100vh;
 }
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
