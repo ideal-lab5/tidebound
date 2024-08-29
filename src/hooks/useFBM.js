@@ -6,8 +6,6 @@ import appState from "../state/appState";
 export default function useFBM(seaLevel, settings) {
   const generation = appState((s) => s.generation);
 
-  console.log(generation);
-
   const fbm = useMemo(
     () =>
       new FBM({

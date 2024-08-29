@@ -15,7 +15,7 @@ const GrassMemoized = memo(Grass);
 const CloudsMemoized = memo(Clouds);
 
 export function Ground({ setTerrainRef, ...props }) {
-    const points = useHexagonScatter(25);
+    const points = useHexagonScatter(50);
     const general =  appState((s) => s.general);
 
     const texture = useTexture(grass);

@@ -60,8 +60,7 @@ function Home(props) {
 
     const queryPlayersJs = async() => {
         let players = await queryPlayers(etf, signer, contract);
-        const playersu8a = etf.createType('Bytes', players.Ok.data).toU8a().slice(4);
-
+        const playersu8a = etf.createType('Bytes', players.Ok.data).toU8a().slice(3);
         // assert(playersU8a % 32 === 0)
         let numPlayers = playersu8a.length / 32;
         let otherIslands = []

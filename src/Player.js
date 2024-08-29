@@ -59,7 +59,7 @@ export function Player({ lerp = THREE.MathUtils.lerp, terrainRef, onPositionChan
       newY -= HEIGHT_CHANGE_AMOUNT;
     }
 
-    const smoothedY = lerp(playerPosition.y, newY, 0.1);
+    const smoothedY = lerp(playerPosition.y, newY, 0.5);
     ref.current.setTranslation(new THREE.Vector3(playerPosition.x, smoothedY, playerPosition.z));
 
     // Update previous position

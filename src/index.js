@@ -38,6 +38,8 @@ function Overlay() {
   const [latestBlock, setLatestBlock] = useState(null)
   const [balance, setBalance] = useState(0);
 
+  const [orbitDb, setOrbitDb] = useState(null);
+
   const CustomTypes = {
     Island: {
       name: '[u8;32]',
@@ -59,6 +61,7 @@ function Overlay() {
   }, []);
 
   const setupOrbitDb = async () => {
+    
     const Libp2pOptions = {
       services: {
         pubsub: gossipsub({
@@ -73,33 +76,37 @@ function Overlay() {
     const ipfs = await createHelia({ libp2p })
     const orbitdb = await createOrbitDB({ ipfs })
 
-    // Create / Open a database. Defaults to db type "events".
-    const db = await orbitdb.open("hello")
+    console.log('OrbitDB is ready')
+    setOrbitDb(orbitdb)
 
-    const address = db.address
-    console.log(address)
+    // Create / Open a database. Defaults to db type "events".
+
+    // const db = await orbitdb.open("hello")
+
+    // const address = db.address
+    // console.log(address)
     // "/orbitdb/zdpuAkstgbTVGHQmMi5TC84auhJ8rL5qoaNEtXo2d5PHXs2To"
     // The above address can be used on another peer to open the same database
 
-    // Listen for updates from peers
-    db.events.on("update", async entry => {
-      console.log(entry)
-      const all = await db.all()
-      console.log(all)
-    })
+    // // Listen for updates from peers
+    // db.events.on("update", async entry => {
+    //   console.log(entry)
+    //   const all = await db.all()
+    //   console.log(all)
+    // })
 
-    // Add an entry
-    const hash = await db.add("world")
-    console.log(hash)
+    // // Add an entry
+    // const hash = await db.add("world")
+    // console.log(hash)
 
-    // Query
-    for await (const record of db.iterator()) {
-      console.log(record)
-    }
+    // // Query
+    // for await (const record of db.iterator()) {
+    //   console.log(record)
+    // }
 
-    await db.close()
-    await orbitdb.stop()
-    await ipfs.stop()
+    // await db.close()
+    // await orbitdb.stop()
+    // await ipfs.stop()
   }
 
   const handleIDNConnect = async () => {
@@ -129,7 +136,7 @@ function Overlay() {
 
   return (
     <>
-      <EtfContext.Provider value={{ etf, signer, contract, balance }} >
+      <EtfContext.Provider value={{ etf, signer, contract, balance, orbitDb }} >
         <App />
         <div className="overlay" />
         <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
