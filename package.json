@@ -50,7 +50,7 @@
     "zustand": "3.7.2"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "GENERATE_SOURCE_MAP=false && craco start",
     "build": "craco build",
     "test": "craco test"
   },
