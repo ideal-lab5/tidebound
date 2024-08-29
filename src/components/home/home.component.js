@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import './home.component.css';
 import Modal from 'react-modal';
 import { createIsland, queryIslandRegistry, queryPlayers } from '../../services/contract.service';
@@ -191,6 +191,11 @@ function Home(props) {
                                         <button className='smash-button' onClick={handleCreateIsland}>Create</button>
                                     </div>
                                 </Modal>
+                                <Modal isOpen={showLoading}
+                                    onRequestClose={handleCloseModal}
+                                    contentLabel='Loading'
+                                    style={customStyles}
+                                > <div> HEY WE LOADING IN HERE </div></Modal>
                             </div>
                         )}
                     </div>
