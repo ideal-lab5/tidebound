@@ -14,6 +14,7 @@ To run the game you must have a running IDN instance (node) and the tidebound co
 docker pull ideallabs/etf
 docker run ideallabs/etf --tmp --dev --alice
 cd contracts/tidebound
+cargo contract build
 ./deploy_local.sh
 ```
 
