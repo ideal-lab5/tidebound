@@ -1,0 +1,41 @@
+{
+    "name": "relayer",
+    "type": "module",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+      "@chainsafe/libp2p-gossipsub": "^13.2.0",
+      "@chainsafe/libp2p-noise": "^15.1.1",
+      "@chainsafe/libp2p-yamux": "^6.0.2",
+      "@helia/unixfs": "^3.0.7",
+      "@libp2p/bootstrap": "^10.1.5",
+      "@libp2p/identify": "^2.1.5",
+      "@libp2p/tcp": "^9.1.5",
+      "@libp2p/webrtc-star": "^7.0.0",
+      "helia": "^4.2.5",
+      "libp2p": "^1.9.2",
+      "orbit-db": "^0.29.0"
+    },
+    "scripts": {
+      "relay": "node src/relay.js"
+    },
+    "browserslist": {
+      "production": [
+        ">0.2%",
+        "not dead",
+        "not op_mini all"
+      ],
+      "development": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+      ]
+    },
+    "keywords": [
+      "libp2p",
+      "pubsub",
+      "relayer"
+    ],
+    "description": "A relayer for libp2p browser-browser communication"
+  }
+  

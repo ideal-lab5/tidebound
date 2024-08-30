@@ -16,15 +16,12 @@ import { CodePromise, ContractPromise } from '@polkadot/api-contract';
 import abi from './resources/transmutation.json';
 
 import App from "./App";
-import { createHelia } from 'helia';
-import { createOrbitDB } from '@orbitdb/core';
-import { gossipsub } from "@chainsafe/libp2p-gossipsub";
-import { identify } from "@libp2p/identify";
-import { createLibp2p } from 'libp2p'
+import { multiaddr } from '@multiformats/multiaddr'
 import logo from './resources/logo.png';
 import WalletConnect from "./connect/connect.component";
 import { EtfContext } from "./EtfContext";
 import chainspec from './resources/etfTestSpecRaw.json';
+import { initLibp2p } from "./services/libp2p.service";
 
 
 function Overlay() {
@@ -38,7 +35,7 @@ function Overlay() {
   const [latestBlock, setLatestBlock] = useState(null)
   const [balance, setBalance] = useState(0);
 
-  const [orbitDb, setOrbitDb] = useState(null);
+  const [libp2p, setLibp2p] = useState(null);
 
   const CustomTypes = {
     Island: {
@@ -55,58 +52,29 @@ function Overlay() {
 
     handleIDNConnect().then(() => {
       console.log('connected to IDN')
-      setupOrbitDb()
+      setupComms()
     });
 
   }, []);
 
-  const setupOrbitDb = async () => {
+  const setupComms = async () => {
+    const relayAddr = '/ip4/172.26.99.162/tcp/45863/ws/p2p/12D3KooWHWmueJeEjgE1x278rKWmULgGeTgo9vZn7ghKtmSPnjBS'
+    const node = await initLibp2p(relayAddr);
+    console.log(`Node started with id ${node.peerId.toString()}`)
+    const conn = await node.dial(multiaddr(relayAddr))
+    console.log('connected to relay')
+    // console.log()
+    console.log(`Connected to the relay ${conn.remotePeer.toString()}`)
+
+    // Wait for connection and relay to be bind for the example purpose
+    node.addEventListener('self:peer:update', (evt) => {
+      // Updated self multiaddrs?
+      console.log(`Advertising with a relay address of ${node.getMultiaddrs()[0].toString()}`)
+    })
+
     
-    const Libp2pOptions = {
-      services: {
-        pubsub: gossipsub({
-          // neccessary to run a single peer
-          allowPublishToZeroTopicPeers: true
-        }),
-        identify: identify()
-      }
-    }
 
-    const libp2p = await createLibp2p({ ...Libp2pOptions })
-    const ipfs = await createHelia({ libp2p })
-    const orbitdb = await createOrbitDB({ ipfs })
-
-    console.log('OrbitDB is ready')
-    setOrbitDb(orbitdb)
-
-    // Create / Open a database. Defaults to db type "events".
-
-    // const db = await orbitdb.open("hello")
-
-    // const address = db.address
-    // console.log(address)
-    // "/orbitdb/zdpuAkstgbTVGHQmMi5TC84auhJ8rL5qoaNEtXo2d5PHXs2To"
-    // The above address can be used on another peer to open the same database
-
-    // // Listen for updates from peers
-    // db.events.on("update", async entry => {
-    //   console.log(entry)
-    //   const all = await db.all()
-    //   console.log(all)
-    // })
-
-    // // Add an entry
-    // const hash = await db.add("world")
-    // console.log(hash)
-
-    // // Query
-    // for await (const record of db.iterator()) {
-    //   console.log(record)
-    // }
-
-    // await db.close()
-    // await orbitdb.stop()
-    // await ipfs.stop()
+    setLibp2p(node);
   }
 
   const handleIDNConnect = async () => {
@@ -136,7 +104,7 @@ function Overlay() {
 
   return (
     <>
-      <EtfContext.Provider value={{ etf, signer, contract, balance, orbitDb }} >
+      <EtfContext.Provider value={{ etf, signer, contract, balance, libp2p }} >
         <App />
         <div className="overlay" />
         <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>

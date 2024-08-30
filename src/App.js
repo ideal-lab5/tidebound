@@ -22,12 +22,16 @@ export default function App() {
         set(true)
     }
 
+    const handleOnExit = () => {
+        setShowGame(false);
+    }
+
     return (
         <>
             {!showGame ?
                 <Home onEnterGame={handleShowGame} /> :
                 <div className={`fullscreen bg ready`}>
-                    <Game />
+                    <Game onExit={handleOnExit} />
                 </div>
             }
         </>

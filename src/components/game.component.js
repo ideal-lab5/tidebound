@@ -8,19 +8,19 @@ import appState from "../state/appState";
 import { EtfContext } from "../EtfContext";
 import { IPFSAccessController } from "@orbitdb/core";
 
-export default function Game() {
+export default function Game(props) {
     const [terrainRef, setTerrainRef] = useState(null);
     const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0, z: 0 });
 
     const seed = appState((s) => s.generation.Seed);
 
-    const { signer, orbitDb } = useContext(EtfContext);
+    const { signer, libp2p } = useContext(EtfContext);
 
     // useEffect(() => {console.log(orbitDb)}, [orbitDb]);
 
     useEffect(() => {
 
-        // const setup = async () => {
+        const setup = async () => {
         //     const db = await orbitDb.open(
         //         seed.toString(), 
         //         // { 
@@ -42,50 +42,51 @@ export default function Game() {
         //     // for await (const record of db.iterator()) {
         //     //     console.log(record)
         //     // }
-        // }
+        }
 
-        if (orbitDb) {
+        if (libp2p) {
             // console.log(ctx)
-            // setup()
-            initOrbitDB(seed).then(db => db.add("hello  " + signer.address).then(hash => console.log(hash)))
+            setup()
+            // let db = await initOrbitDB(seed);
+            // .then(db => db.add("hello  " + signer.address).then(hash => console.log(hash)))
             // Add an entry
         }
 
         // console.log(ctx);
-    }, [orbitDb]);
+    }, [libp2p]);
 
-    async function initOrbitDB(seed) {
-        // // Initialize Helia
-        // const helia = await initHelia();
+    // async function initOrbitDB(seed) {
+    //     // // Initialize Helia
+    //     // const helia = await initHelia();
 
-        // // Create an instance of OrbitDB with Helia's IPFS
-        // const orbitdb = await OrbitDB.createInstance(helia.ipfs);
+    //     // // Create an instance of OrbitDB with Helia's IPFS
+    //     // const orbitdb = await OrbitDB.createInstance(helia.ipfs);
 
-        // Open or create a database using the provided seed
-        // const db = await orbitdb.keyvalue(seed);
+    //     // Open or create a database using the provided seed
+    //     // const db = await orbitdb.keyvalue(seed);
 
-        // Load existing data from the database
-        // await db.load();
+    //     // Load existing data from the database
+    //     // await db.load();
 
-        const db = await orbitDb.open(
-            seed.toString(),
-            { 
-                AccessController: IPFSAccessController({ write: ['*'] })
-            }
-        );
+    //     const db = await orbitDb.open(
+    //         seed.toString(),
+    //         {
+    //             AccessController: IPFSAccessController({ write: ['*'] })
+    //         }
+    //     );
 
-        // // Log replication events
-        // db.events.on('replicated', (address) => {
-        //     console.log(`Database replicated at: ${address}`);
-        // });
+    //     // // Log replication events
+    //     // db.events.on('replicated', (address) => {
+    //     //     console.log(`Database replicated at: ${address}`);
+    //     // });
 
-        // // Log database updates
-        // db.events.on('write', (address, entry) => {
-        //     console.log(`Database updated: ${entry.payload.value}`);
-        // });
+    //     // // Log database updates
+    //     // db.events.on('write', (address, entry) => {
+    //     //     console.log(`Database updated: ${entry.payload.value}`);
+    //     // });
 
-        return db;
-    }
+    //     return db;
+    // }
 
 
     // Function to update player position
@@ -96,6 +97,10 @@ export default function Game() {
             z: position.z.toFixed(2),
         });
     };
+
+    const handleOnExit = () => {
+        props.onExit()
+    }
 
     return (
         <>
@@ -128,6 +133,13 @@ export default function Game() {
                 fontSize: "14px",
                 zIndex: 1000,
             }}>
+                <button
+                    onClick={handleOnExit}
+                    style={{ marginTop: "20px", padding: "10px 20px", cursor: "pointer" }}
+                >
+                    Exit
+                </button>
+                <span>Press `esc` to control pointer</span>
                 <h2>Controls:</h2>
                 <ul>
                     <li><strong>W</strong> / <strong>Arrow Up</strong> - Move Forward</li>

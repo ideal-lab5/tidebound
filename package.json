@@ -50,9 +50,10 @@
     "zustand": "3.7.2"
   },
   "scripts": {
-    "start": "GENERATE_SOURCE_MAP=false && craco start",
+    "start": "GENERATE_SOURCE_MAP=false craco start",
     "build": "craco build",
-    "test": "craco test"
+    "test": "craco test",
+    "relay": "node /src/relay.js"
   },
   "eslintConfig": {
     "extends": "react-app"

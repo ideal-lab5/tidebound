@@ -1,159 +1,129 @@
-/* Main Asset Management Screen */
-.asset-management-screen {
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #101010; /* Dark background for immersive look */
+    color: #E0E0E0; /* Light gray text for contrast */
+  }
+  
+  .asset-management-screen {
     display: flex;
     height: 100vh;
-    background: linear-gradient(135deg, #000428, #004e92); /* Dark blue gradient */
-    color: #fff;
-    font-family: 'Roboto Mono', monospace; /* Clean, technical font */
-}
-
-/* Sidebar */
-.sidebar {
+  }
+  
+  .sidebar {
     width: 250px;
-    background-color: #001f3f;
+    background-color: #1A1A1A; /* Darker sidebar for separation */
+    color: #E0E0E0;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    border-right: 3px solid #ffcc00; /* Bright yellow accent */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-}
-
-.sidebar-header {
-    padding: 20px;
-    text-align: center;
-    border-bottom: 3px solid #ffcc00;
-    background-color: #00264d;
-}
-
-.sidebar-tabs {
+  }
+  
+  .sidebar-header {
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar-tabs {
     list-style: none;
     padding: 0;
     margin: 0;
-    flex-grow: 1;
-}
-
-.tab {
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 1.1em;
-    color: #ffcc00;
-    border-bottom: 2px solid #00264d;
-}
-
-.tab:hover,
-.tab.active {
-    background-color: #004080; /* Brighten on hover or active */
-    color: #fff;
-}
-
-/* Content Area */
-.content-area {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: #00264d;
-    overflow-y: auto;
-}
-
-.island-details {
-    display: inline-block;
-}
-
-.island-details, .worldmap-details {
-    background-color: #001f3f;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    /* transition: transform 0.2s ease-in-out; */
-    border: 3px solid #ffcc00;
-}
-
-/* World Info Container */
-.world-info-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center content horizontally */
-    padding: 20px;
-    background-color: #001f3f;
-    border: 3px solid #ffcc00;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    /* transition: transform 0.2s ease-in-out; */
-    width: 50%;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Header */
-.world-info-container h2 {
-    font-size: 2em; /* Larger font size for prominence */
-    margin-bottom: 10px;
-    color: #ffcc00;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 700;
-    text-align: center; /* Center the header text */
-}
-
-/* Paragraphs */
-.world-info-container p {
-    margin: 5px 0;
-    font-size: 1em; /* Standard font size for content */
-    color: #ffffff;
-    line-height: 1.6;
-    font-family: 'Roboto Mono', monospace; /* Clean, readable font */
-    word-wrap: break-word; /* Ensure text wraps to the next line */
-    width: 100%;
-    text-align: center; /* Center the text */
-}
-
-/* Seed Specific Styling */
-.world-info-container p strong {
-    color: #ffcc00;
-    font-weight: bold;
-}
-
-.world-info-container p.seed {
-    font-size: 0.8em; /* Smaller font size for seed */
-    color: #cccccc; /* Lighter color for less prominence */
-    text-overflow: ellipsis; /* Truncate overflow text with ellipsis */
-    white-space: nowrap; /* Prevent text wrapping */
-    overflow: hidden; /* Hide overflow text */
-}
-
-/* Buttons */
-.smash-button {
-    padding: 12px 25px; /* Slightly reduced padding for better fit */
-    background-color: #ffcc00;
-    color: #000;
-    border: 2px solid #00264d;
-    border-radius: 0;
-    cursor: pointer;
-    font-size: 1.2em;
-    font-weight: bold;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-    transition: background-color 0.3s, transform 0.2s;
-    margin-top: 20px;
-    align-self: center; /* Center the button within the container */
-}
-
-.smash-button:hover {
-    background-color: #ffaa00;
-    transform: scale(1.1);
-}
-
-
-.create-island {
-    width: 400px;
-    font-size: 20px;
-    font-family: 'roboto-mono', sans-serif;
-    display: grid;
-}
-
-.worldmap-details {
-    height: 100vh;
-}
-
-input[type=text] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
   }
+  
+  .tab {
+    padding: 15px 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in;
+  }
+  
+  .tab:hover, .tab.active {
+    background-color: #333; /* Slightly lighter for hover and active state */
+  }
+  
+  .content-area {
+    flex: 1;
+    padding: 30px;
+    background-color: #151515;
+    overflow-y: auto;
+  }
+  
+  .island-details, .worldmap-details {
+    background-color: #202020;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+  }
+  
+  .smash-button {
+    background-color: #4B89DC;
+    border: none;
+    color: #FFF;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  
+  .smash-button:hover {
+    background-color: #3A6FB0; /* Darker blue on hover */
+  }
+  
+  .create-island label {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+  
+  .create-island input {
+    background-color: #2A2A2A;
+    border: 1px solid #333;
+    padding: 8px;
+    color: #E0E0E0;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .island-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .island-item {
+    background-color: #2A2A2A;
+    padding: 15px;
+    border: 1px solid #333;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .island-item button {
+    background-color: #4B89DC;
+    border: none;
+    color: #FFF;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .island-item button:hover {
+    background-color: #3A6FB0;
+  }
+  

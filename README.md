@@ -8,11 +8,13 @@ Tidebound is powered by verifiable randomness from the IDN Randomness beacon. It
 
 ### Pre-requisites
 
-To run the game you must have a running IDN instance (node) and the tidebound contract must be deployed.
+To run the game you must have a running IDN instance (node) and the tidebound contract must be deployed. To start, open two terminals and then
 
 ``` shell
+# in terminal 1
 docker pull ideallabs/etf
 docker run ideallabs/etf --tmp --dev --alice
+# in terminal 2
 cd contracts/tidebound
 ./deploy_local.sh
 ```
@@ -24,9 +26,17 @@ npm i
 npm run start
 ```
 
+The game opens on `localhost:3000`.
+
 ## TODOs
-- [ ] split home component into multiple components & add lazy loading
 - [ ] p2p communication via orbitdb
+- [ ] add collisions to islands
+- [ ] add 'play as guest' mode
+- [ ] sometimes renders without color
+- [ ] allow players to customize aspects of their island (through the contract, e.g. set color of things)
+- [ ] improve player movements + add gravity
+- [ ] connect/extend hex islands
+- [ ] split home component into multiple components & add lazy loading
 - [ ] implement 'factory' contract to enable multiple instances of the game
 - [ ] develop axial hex grid to track world in contract storage
 - [ ] R&D Tidal Energy (points)
@@ -35,4 +45,4 @@ npm run start
 
 ## License
 
-Apache2
+MIT-0

@@ -58,7 +58,7 @@ function Home(props) {
         }
     }, [signer]);
 
-    const queryPlayersJs = async() => {
+    const queryPlayersJs = async () => {
         let players = await queryPlayers(etf, signer, contract);
         const playersu8a = etf.createType('Bytes', players.Ok.data).toU8a().slice(3);
         // assert(playersU8a % 32 === 0)
@@ -72,7 +72,7 @@ function Home(props) {
             const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
             let islandName = u8aToString(islandU8a.slice(4, 35));
             let islandSeed = islandU8a.slice(36);
-            let island = {'name': islandName, 'seed': islandSeed};
+            let island = { 'name': islandName, 'seed': islandSeed };
             otherIslands.push(island)
         }
 
@@ -195,7 +195,11 @@ function Home(props) {
                                     onRequestClose={handleCloseModal}
                                     contentLabel='Loading'
                                     style={customStyles}
-                                > <div> HEY WE LOADING IN HERE </div></Modal>
+                                > <div>
+                                        <span>
+                                            Waiting for transaction authorization from the Polkadotjs extension 
+                                        </span>
+                                    </div></Modal>
                             </div>
                         )}
                     </div>
