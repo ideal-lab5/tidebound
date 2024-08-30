@@ -16,6 +16,7 @@ docker pull ideallabs/etf
 docker run ideallabs/etf --tmp --dev --alice
 # in terminal 2
 cd contracts/tidebound
+cargo contract build
 ./deploy_local.sh
 ```
 
