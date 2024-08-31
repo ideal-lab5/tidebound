@@ -1,3 +1,4 @@
+"use client"
 const path = require("path");
 const webpack = require("webpack");
 
@@ -11,6 +12,11 @@ module.exports = {
                 path: require.resolve("path-browserify"),
                 os: require.resolve("os-browserify/browser"),
                 fs: require.resolve("fs"),
+                net: false,
+                http2: false,
+                module: false,
+                timers: false,
+                tls: false
             };
             webpackConfig.plugins.push(
                 new webpack.ProvidePlugin({

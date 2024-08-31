@@ -21,7 +21,7 @@ import logo from './resources/logo.png';
 import WalletConnect from "./connect/connect.component";
 import { EtfContext } from "./EtfContext";
 import chainspec from './resources/etfTestSpecRaw.json';
-import { initLibp2p } from "./services/libp2p.service";
+import { Libp2p } from "./services/libp2p.service";
 
 
 function Overlay() {
@@ -45,10 +45,10 @@ function Overlay() {
   };
 
   useEffect(() => {
-    // if (process.env.REACT_APP_WS_URL === undefined || process.env.REACT_APP_CONTRACT_ADDRESS === undefined) {
-    //   console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
-    //   process.kill();
-    // }
+    if (process.env.REACT_APP_WS_URL === undefined || process.env.REACT_APP_CONTRACT_ADDRESS === undefined) {
+      console.error("Invalid environment variables! Create a .env and specify REACT_APP_WS_URL and REACT_APP_CONTRACT_ADDRESS");
+      process.kill();
+    }
 
     handleIDNConnect().then(() => {
       console.log('connected to IDN')
@@ -58,34 +58,39 @@ function Overlay() {
   }, []);
 
   const setupComms = async () => {
-    const relayAddr = '/ip4/172.26.99.162/tcp/45863/ws/p2p/12D3KooWHWmueJeEjgE1x278rKWmULgGeTgo9vZn7ghKtmSPnjBS'
-    const node = await initLibp2p(relayAddr);
-    console.log(`Node started with id ${node.peerId.toString()}`)
-    const conn = await node.dial(multiaddr(relayAddr))
-    console.log('connected to relay')
-    // console.log()
-    console.log(`Connected to the relay ${conn.remotePeer.toString()}`)
+    const relayAddr = '/ip4/172.26.99.162/tcp/9001/ws/p2p/12D3KooW9wUMNmNh6d6vXcuKbZMnrDt8KFbjtUvwgeoqgWq8TqM5'
+    // const relayAddr = process.env.REACT_APP_RELAYER_MADDR;
+    const node = await Libp2p(relayAddr);
+    node.services.pubsub.addEventListener('message', event => {
+      const topic = event.detail.topic
+      // const message = toString(event.detail.data)
 
-    // Wait for connection and relay to be bind for the example purpose
-    node.addEventListener('self:peer:update', (evt) => {
-      // Updated self multiaddrs?
-      console.log(`Advertising with a relay address of ${node.getMultiaddrs()[0].toString()}`)
+      console.log(`Message received on topic '${topic}'`)
+      console.log(event.detail)
     })
 
-    
-
+    console.log(`Node started with id ${node.peerId.toString()}`)
     setLibp2p(node);
+    console.log('libp2p ready with peer id ' + node.peerId)
+
+    // // update topic peers
+    setInterval(() => {
+      console.log(node.getPeers().length)
+    }, 500)
+    // setInterval(() => {
+    //   console.log(node.getConnections())
+    // }, 500)
   }
 
   const handleIDNConnect = async () => {
     await cryptoWaitReady();
-    // let ws = process.env.REACT_APP_WS_URL;
-    let ws = 'ws://127.0.0.1:9944';
+    let ws = process.env.REACT_APP_WS_URL;
+    // let ws = 'ws://127.0.0.1:9944';
     let etf = new Etf(ws, false)
     await etf.init(chainspec, CustomTypes)
     setEtf(etf)
 
-    const contract = new ContractPromise(etf.api, abi, "5EkLwbc5RUWZ1nroaDBrmx7CBMyqW6VL8DzSXqSgAJZs8WKy");
+    const contract = new ContractPromise(etf.api, abi, process.env.REACT_APP_CONTRACT_ADDRESS);
     setContract(contract);
 
     const _unsubscribe = await etf.api.rpc.chain.subscribeNewHeads((header) => {

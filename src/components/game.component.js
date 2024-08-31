@@ -21,76 +21,44 @@ export default function Game(props) {
     useEffect(() => {
 
         const setup = async () => {
-        //     const db = await orbitDb.open(
-        //         seed.toString(), 
-        //         // { 
-        //         //     AccessController: IPFSAccessController({ write: ['*'] })
-        //         // }
-        //     );
+            // subscribe to pubsub topic (seed)
+            console.log('subscribing to ' + + seed)
+            libp2p.services.pubsub.subscribe(seed.toString())
 
-        //     // // Listen for updates from peers
-        //     // db.events.on("update", async entry => {
-        //     //     console.log(entry)
-        //     //     const all = await db.all()
-        //     //     console.log(all)
-        //     // })
+            libp2p.services.pubsub.addEventListener('message', event => {
+                const topic = event.detail.topic
+                const message = toString(event.detail.data)
 
-        //     // Add an entry
-        //     db.add("world " + signer.address).then(hash => console.log(hash));
+                console.log(`Message received on topic '${topic}'`)
+                console.log(event)
+            })
 
-        //     // // Query
-        //     // for await (const record of db.iterator()) {
-        //     //     console.log(record)
-        //     // }
         }
 
         if (libp2p) {
-            // console.log(ctx)
             setup()
-            // let db = await initOrbitDB(seed);
-            // .then(db => db.add("hello  " + signer.address).then(hash => console.log(hash)))
-            // Add an entry
         }
 
         // console.log(ctx);
     }, [libp2p]);
 
-    // async function initOrbitDB(seed) {
-    //     // // Initialize Helia
-    //     // const helia = await initHelia();
-
-    //     // // Create an instance of OrbitDB with Helia's IPFS
-    //     // const orbitdb = await OrbitDB.createInstance(helia.ipfs);
-
-    //     // Open or create a database using the provided seed
-    //     // const db = await orbitdb.keyvalue(seed);
-
-    //     // Load existing data from the database
-    //     // await db.load();
-
-    //     const db = await orbitDb.open(
-    //         seed.toString(),
-    //         {
-    //             AccessController: IPFSAccessController({ write: ['*'] })
-    //         }
-    //     );
-
-    //     // // Log replication events
-    //     // db.events.on('replicated', (address) => {
-    //     //     console.log(`Database replicated at: ${address}`);
-    //     // });
-
-    //     // // Log database updates
-    //     // db.events.on('write', (address, entry) => {
-    //     //     console.log(`Database updated: ${entry.payload.value}`);
-    //     // });
-
-    //     return db;
-    // }
-
 
     // Function to update player position
     const updatePlayerPosition = (position) => {
+        const x = position.x.toFixed(2);
+        const y = position.y.toFixed(2);
+        const z = position.z.toFixed(2);
+
+        // gossip (x,y,z) to topic
+        console.log('publishing to pubsub topic')
+        // console.log(libp2p.getPeers().length)
+        // check for peers
+
+        const peerList = libp2p.services.pubsub.getSubscribers(seed.toString());
+        if (peerList.length > 0) {
+            libp2p.services.pubsub.publish(seed.toString(), { "x": x, "y": y, "z": z })
+        }
+
         setPlayerPosition({
             x: position.x.toFixed(2),
             y: position.y.toFixed(2),

@@ -49,7 +49,7 @@ function Home(props) {
 
         if (signer) {
             queryIsland(signer.address).then(island => {
-                if (island.seed != "") {
+                if (island && island.seed != "") {
                     setCurrentIsland(island);
                 }
                 queryPlayersJs();
@@ -60,23 +60,25 @@ function Home(props) {
 
     const queryPlayersJs = async () => {
         let players = await queryPlayers(etf, signer, contract);
-        const playersu8a = etf.createType('Bytes', players.Ok.data).toU8a().slice(3);
-        // assert(playersU8a % 32 === 0)
-        let numPlayers = playersu8a.length / 32;
-        let otherIslands = []
+        if (players.Ok) {
+            const playersu8a = etf.createType('Bytes', players.Ok.data).toU8a().slice(3);
+            // assert(playersU8a % 32 === 0)
+            let numPlayers = playersu8a.length / 32;
+            let otherIslands = []
 
-        for (let i = 0; i < numPlayers; i++) {
-            let playerAccountId = etf.createType('AccountId', playersu8a.slice(i * 32, (i + 1) * 32))
-            let islandData = await queryIslandRegistry(etf, signer, contract, playerAccountId);
-            const rawIslandData = islandData.Ok.data;
-            const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
-            let islandName = u8aToString(islandU8a.slice(4, 35));
-            let islandSeed = islandU8a.slice(36);
-            let island = { 'name': islandName, 'seed': islandSeed };
-            otherIslands.push(island)
+            for (let i = 0; i < numPlayers; i++) {
+                let playerAccountId = etf.createType('AccountId', playersu8a.slice(i * 32, (i + 1) * 32))
+                let islandData = await queryIslandRegistry(etf, signer, contract, playerAccountId);
+                const rawIslandData = islandData.Ok.data;
+                const islandU8a = etf.createType('Bytes', rawIslandData).toU8a();
+                let islandName = u8aToString(islandU8a.slice(4, 35));
+                let islandSeed = islandU8a.slice(36);
+                let island = { 'name': islandName, 'seed': islandSeed };
+                otherIslands.push(island)
+            }
+
+            setOtherIslands(otherIslands);
         }
-
-        setOtherIslands(otherIslands);
     }
 
     const csprngFromSeed = (seed) => {
@@ -89,6 +91,9 @@ function Home(props) {
 
     const queryIsland = async (who) => {
         let islandData = await queryIslandRegistry(etf, signer, contract, who);
+        if (!islandData.Ok) {
+            return null;
+        }
         // Assuming islandData is in the form { Ok: { flags: [], data: "0x..." } }
         const rawIslandData = islandData.Ok.data;
         // Convert the raw data into a u8a (if it's in hex form)
@@ -197,7 +202,7 @@ function Home(props) {
                                     style={customStyles}
                                 > <div>
                                         <span>
-                                            Waiting for transaction authorization from the Polkadotjs extension 
+                                            Waiting for transaction authorization from the Polkadotjs extension
                                         </span>
                                     </div></Modal>
                             </div>
