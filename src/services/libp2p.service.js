@@ -70,12 +70,12 @@ export const Libp2p = async (relayerMaddr) => {
 
   // node.services.pubsub.subscribe("test-topic")
 
-  node.services.pubsub.addEventListener('message', event => {
-    // const topic = event.detail.topic
-    // const message = toString(event.detail.data)
-    // console.log(`Message received on topic '${topic}'`)
-    console.log(event)
-  })
+  // node.services.pubsub.addEventListener('message', event => {
+  //   // const topic = event.detail.topic
+  //   // const message = toString(event.detail.data)
+  //   // console.log(`Message received on topic '${topic}'`)
+  //   console.log(event)
+  // })
 
   return node;
 }

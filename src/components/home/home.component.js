@@ -17,14 +17,16 @@ const customStyles = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        backgroundColor: '#001f3f', // Deep navy blue for a nautical feel
-        color: '#ffcc00', // Bright yellow text for contrast
+        backgroundColor: '#101010',
+        color: '#E0E0E0',
         borderRadius: '10px',
         padding: '20px',
         boxShadow: '0 0 20px rgba(0, 0, 0, 0.8)', // Strong shadow for depth
-        fontFamily: "'Press Start 2P', cursive", // Retro game font
         textAlign: 'center', // Center text within the modal
         border: '2px solid #003366', // Border matching the nautical theme
+    },
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.75)', // Dark overlay to focus on the modal
     },
 };
 
@@ -53,7 +55,6 @@ function Home(props) {
                     setCurrentIsland(island);
                 }
                 queryPlayersJs();
-                // setOtherIslands(mockOtherIslands);
             });
         }
     }, [signer]);
@@ -137,7 +138,8 @@ function Home(props) {
             let formattedName = name.padEnd(32, ' ');
             await createIsland(etf, signer, formattedName, contract, async (result) => {
                 if (result.status.isInBlock) {
-                    await queryIsland(signer.address);
+                    let island = await queryIsland(signer.address);
+                    setCurrentIsland(island)
                 }
             });
             setShowLoading(false);
@@ -151,16 +153,36 @@ function Home(props) {
         handleOnEnter(island);
     }
 
+    const handleDisconnect = () => {
+        props.onDisconnect()
+        // nullify storage
+        setCurrentIsland(null)
+        setOtherIslands(null)
+    }
+
+    const handleShowWorldMap = () => {
+        queryPlayersJs().then(setActiveTab('worldmap'));
+
+    }
+
     return (
         <div className='asset-management-screen'>
             <aside className='sidebar'>
+                <div className='Title'>
+                    Tidebound
+                </div>
                 <div className='sidebar-header'>
                     <h2>Menu</h2>
                 </div>
                 <ul className='sidebar-tabs'>
                     <li className={`tab ${activeTab === 'your-island' ? 'active' : ''}`} onClick={() => setActiveTab('your-island')}>Your Island</li>
-                    <li className={`tab ${activeTab === 'worldmap' ? 'active' : ''}`} onClick={() => setActiveTab('worldmap')}>WorldMap</li>
+                    <li className={`tab ${activeTab === 'worldmap' ? 'active' : ''}`} onClick={handleShowWorldMap}>WorldMap</li>
                 </ul>
+                <div className='player-info'>
+                    <span>Address: {signer ? signer.address.slice(0, 4) + ' ... ' + signer.address.slice(-4) : 'Loading...'}</span>
+                    <span>Balance: {balance} IDN</span>
+                    <button onClick={handleDisconnect}>Disconnect</button>
+                </div>
             </aside>
 
             <main className='content-area'>

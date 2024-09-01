@@ -6,34 +6,66 @@ import { Player } from "../Player";
 import { useState, useEffect, useContext } from "react";
 import appState from "../state/appState";
 import { EtfContext } from "../EtfContext";
-import { IPFSAccessController } from "@orbitdb/core";
+import { presetsObj } from "@react-three/drei/helpers/environment-assets";
+import { Cube } from "../Cube";
+import create from "zustand";
+import { Avatar } from "../Avatar";
+
+// Create Zustand store for managing cube positions
+export const useCubeStore = create((set) => ({
+    cubes: [],
+    addCube: (id, x, y, z) => set((state) => {
+        // get all cubes that don't belong to the player
+        const updatedCubes = state.cubes.filter((cube) => cube.id !== id);
+        // update player cube
+        return { cubes: [...updatedCubes, { id, x, y, z }] };
+    }),
+}));
+
+
+export const Players = () => {
+    const cubes = useCubeStore((state) => state.cubes); // Get cubes from Zustand store
+
+    return cubes.map((cube, index) => (
+        <Avatar key={index} position={[cube.x, cube.y, cube.z]} />
+    ));
+};
+
 
 export default function Game(props) {
+    
     const [terrainRef, setTerrainRef] = useState(null);
     const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0, z: 0 });
+
+    const addCube = useCubeStore((s) => s.addCube)
+    const [peerPositions, setPeerPositions] = useState([]);
 
     const seed = appState((s) => s.generation.Seed);
 
     const { signer, libp2p } = useContext(EtfContext);
 
-    // useEffect(() => {console.log(orbitDb)}, [orbitDb]);
 
     useEffect(() => {
 
         const setup = async () => {
-            // subscribe to pubsub topic (seed)
-            console.log('subscribing to ' + + seed)
-            libp2p.services.pubsub.subscribe(seed.toString())
+            // Subscribe to pubsub topic (seed)
+            console.log('subscribing to ' + seed);
+            libp2p.services.pubsub.subscribe(seed.toString());
 
-            libp2p.services.pubsub.addEventListener('message', event => {
-                const topic = event.detail.topic
-                const message = toString(event.detail.data)
+            libp2p.services.pubsub.addEventListener('message', (event) => {
+                const topic = event.detail.topic;
+                if (topic === seed.toString()) {
+                    let playerLocalId = event.detail.from;
+                    let location = event.detail.data;
+                    let decoded = new TextDecoder().decode(location);
+                    let new_pos = JSON.parse(decoded);
 
-                console.log(`Message received on topic '${topic}'`)
-                console.log(event)
-            })
+                    // Update cube position in the Zustand store
+                    addCube(playerLocalId, new_pos.x, new_pos.y, new_pos.z);
+                }
+            });
+        };
 
-        }
 
         if (libp2p) {
             setup()
@@ -51,12 +83,16 @@ export default function Game(props) {
 
         // gossip (x,y,z) to topic
         console.log('publishing to pubsub topic')
-        // console.log(libp2p.getPeers().length)
-        // check for peers
 
         const peerList = libp2p.services.pubsub.getSubscribers(seed.toString());
         if (peerList.length > 0) {
-            libp2p.services.pubsub.publish(seed.toString(), { "x": x, "y": y, "z": z })
+            libp2p.services.pubsub.publish(
+                seed.toString(),
+                new TextEncoder().encode(
+                    // (x, y, z)
+                    JSON.stringify({ "x": x, "y": y, "z": z })
+                )
+            )
         }
 
         setPlayerPosition({
@@ -88,6 +124,9 @@ export default function Game(props) {
                     <Physics gravity={[0, 0, 0]}>
                         <Ground setTerrainRef={setTerrainRef} />
                         <Player terrainRef={terrainRef} onPositionChange={updatePlayerPosition} />
+                        <Players />
+                        {/* <Cube position={[1,10,1]} /> */}
+                        {/* <Cubes peerPositions={peerPositions} /> */}
                     </Physics>
                     <PointerLockControls />
                 </Canvas>

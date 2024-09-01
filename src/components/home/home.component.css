@@ -1,129 +1,170 @@
 body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #101010; /* Dark background for immersive look */
-    color: #E0E0E0; /* Light gray text for contrast */
-  }
-  
-  .asset-management-screen {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .sidebar {
-    width: 250px;
-    background-color: #1A1A1A; /* Darker sidebar for separation */
-    color: #E0E0E0;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .sidebar-header {
-    border-bottom: 1px solid #333;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .sidebar-tabs {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .tab {
-    padding: 15px 10px;
-    cursor: pointer;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease-in;
-  }
-  
-  .tab:hover, .tab.active {
-    background-color: #333; /* Slightly lighter for hover and active state */
-  }
-  
-  .content-area {
-    flex: 1;
-    padding: 30px;
-    background-color: #151515;
-    overflow-y: auto;
-  }
-  
-  .island-details, .worldmap-details {
-    background-color: #202020;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 24px;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
-  }
-  
-  .smash-button {
-    background-color: #4B89DC;
-    border: none;
-    color: #FFF;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in;
-    border-radius: 4px;
-    margin-top: 10px;
-  }
-  
-  .smash-button:hover {
-    background-color: #3A6FB0; /* Darker blue on hover */
-  }
-  
-  .create-island label {
-    margin-right: 10px;
-    font-size: 14px;
-  }
-  
-  .create-island input {
-    background-color: #2A2A2A;
-    border: 1px solid #333;
-    padding: 8px;
-    color: #E0E0E0;
-    margin-bottom: 20px;
-    width: 100%;
-  }
-  
-  .island-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .island-item {
-    background-color: #2A2A2A;
-    padding: 15px;
-    border: 1px solid #333;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .island-item button {
-    background-color: #4B89DC;
-    border: none;
-    color: #FFF;
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 3px;
-  }
-  
-  .island-item button:hover {
-    background-color: #3A6FB0;
-  }
-  
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #101010;
+  /* Dark background for immersive look */
+  color: #E0E0E0;
+  /* Light gray text for contrast */
+}
+
+.asset-management-screen {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #1A1A1A;
+  /* Darker sidebar for separation */
+  color: #E0E0E0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.sidebar-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tab {
+  padding: 15px 10px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in;
+}
+
+.tab:hover,
+.tab.active {
+  background-color: #333;
+  /* Slightly lighter for hover and active state */
+}
+
+
+.player-info {
+  background-color: #2A2A2A;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  position: absolute; /* Position absolutely within sidebar */
+  bottom: 20px; /* Offset from the bottom of the sidebar */
+  left: 20px; /* Align with sidebar padding */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Shadow at the top for separation */
+}
+
+.player-info span {
+  display: block;
+  margin-bottom: 5px;
+  color: #E0E0E0;
+}
+
+.player-info button {
+  background-color: #4B89DC;
+  border: none;
+  color: #FFF;
+  /* padding: 5px 10px; */
+  width: 100%;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in;
+}
+
+.player-info button:hover {
+  background-color: #3A6FB0;
+}
+
+.content-area {
+  flex: 1;
+  padding: 30px;
+  background-color: #151515;
+  overflow-y: auto;
+}
+
+.island-details,
+.worldmap-details {
+  background-color: #202020;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+}
+
+.smash-button {
+  background-color: #4B89DC;
+  border: none;
+  color: #FFF;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.smash-button:hover {
+  background-color: #3A6FB0;
+  /* Darker blue on hover */
+}
+
+.create-island label {
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.create-island input {
+  background-color: #2A2A2A;
+  border: 1px solid #333;
+  padding: 8px;
+  color: #E0E0E0;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.island-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.island-item {
+  background-color: #2A2A2A;
+  padding: 15px;
+  border: 1px solid #333;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.island-item button {
+  background-color: #4B89DC;
+  border: none;
+  color: #FFF;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.island-item button:hover {
+  background-color: #3A6FB0;
+}

@@ -12,11 +12,10 @@ import "./styles.css";
 
 import { Etf } from '@ideallabs/etf.js'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { CodePromise, ContractPromise } from '@polkadot/api-contract';
+import { ContractPromise } from '@polkadot/api-contract';
 import abi from './resources/transmutation.json';
 
 import App from "./App";
-import { multiaddr } from '@multiformats/multiaddr'
 import logo from './resources/logo.png';
 import WalletConnect from "./connect/connect.component";
 import { EtfContext } from "./EtfContext";
@@ -58,28 +57,18 @@ function Overlay() {
   }, []);
 
   const setupComms = async () => {
-    const relayAddr = '/ip4/172.26.99.162/tcp/9001/ws/p2p/12D3KooW9wUMNmNh6d6vXcuKbZMnrDt8KFbjtUvwgeoqgWq8TqM5'
-    // const relayAddr = process.env.REACT_APP_RELAYER_MADDR;
+    // const relayAddr = process.env.REACT_APP_RELAY_MADDR;
+    const relayAddr = '/ip4/172.26.99.162/tcp/9001/ws/p2p/12D3KooWNa7QQCzt79sxKz9uf3Z6noCCfXE9RyyXHWu6R6pkGYUL';
     const node = await Libp2p(relayAddr);
-    node.services.pubsub.addEventListener('message', event => {
-      const topic = event.detail.topic
-      // const message = toString(event.detail.data)
-
-      console.log(`Message received on topic '${topic}'`)
-      console.log(event.detail)
-    })
 
     console.log(`Node started with id ${node.peerId.toString()}`)
     setLibp2p(node);
     console.log('libp2p ready with peer id ' + node.peerId)
-
+    
     // // update topic peers
     setInterval(() => {
       console.log(node.getPeers().length)
     }, 500)
-    // setInterval(() => {
-    //   console.log(node.getConnections())
-    // }, 500)
   }
 
   const handleIDNConnect = async () => {
@@ -107,10 +96,17 @@ function Overlay() {
     setShowConnect(true)
   }
 
+  const handleDisconnect = () => {
+    // just refresh the app state
+    window.location.reload()
+  }
+
   return (
     <>
       <EtfContext.Provider value={{ etf, signer, contract, balance, libp2p }} >
-        <App />
+
+        <App onDisconnect={handleDisconnect} />
+
         <div className="overlay" />
         <div className={`fullscreen bg ${ready ? "ready" : "notready"} ${ready && "clicked"}`}>
           <div className="start-screen">
