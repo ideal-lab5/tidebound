@@ -8,19 +8,18 @@ Tidebound is powered by verifiable randomness from the IDN Randomness beacon. It
 
 ### Pre-requisites
 
-To run the game you must have a running IDN instance (node) and the tidebound contract must be deployed. To start, open two terminals and then
+To run the game you must have a running IDN instance (substrate node), webrtc relay server (libp2p), and the tidebound contract must be deployed. To start, open two terminals and then:
 
 ``` shell
-# in terminal 1
-docker pull ideallabs/etf
-docker run ideallabs/etf --tmp --dev --alice
+# in terminal 1, run a local node and a relay node
+docker compose up
 # in terminal 2
 cd contracts/tidebound
 cargo contract build
 ./deploy_local.sh
 ```
 
-Then copy the contract address into index.js and run 
+Then copy the contract address into `.env` and run 
 
 ``` shell
 npm i 
@@ -30,7 +29,9 @@ npm run start
 The game opens on `localhost:3000`.
 
 ## TODOs
-- [ ] p2p communication via orbitdb
+- [x] p2p communication w/ libp2p
+    - [ ] use pubsub to relay positions [WIP]
+- [ ] use ready player me for avatars (e.g. https://github.com/knightcube/react-three-fiber-practice-avatar?tab=readme-ov-file)
 - [ ] add collisions to islands
 - [ ] add 'play as guest' mode
 - [ ] sometimes renders without color

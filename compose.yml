@@ -23,6 +23,18 @@ services:
         ipv4_address: 172.29.1.1
         aliases:
           - alice
+  relay:
+    image: "ideallabs/webrtc-relay"
+    environment:
+      NODE_ENV: production
+    ports:
+      - 9001:9001
+      - 9002:9002
+    networks:
+      testing_net:
+        ipv4_address: 172.29.1.2
+        aliases:
+          - relay
 
   # node_bob:
   #   image: "ideallabs/etf"
